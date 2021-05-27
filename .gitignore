@@ -5,9 +5,8 @@ __pycache__/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# Models
-models/
-.model
+# Embeddings
+models/*.txt
 .txt
 
 # NLTK
