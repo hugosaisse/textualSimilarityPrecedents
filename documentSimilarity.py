@@ -1,4 +1,3 @@
-import concurrent.futures
 from datetime import datetime
 from gensim.corpora import Dictionary
 from gensim.models import TfidfModel, WordEmbeddingSimilarityIndex, Word2Vec, LdaModel
@@ -12,6 +11,7 @@ from multiprocessing import Manager
 import nltk
 from nltk.corpus import stopwords
 import numpy as np
+from os import listdir, path
 import pandas as pd
 #!pip install rank-bm25
 from rank_bm25 import BM25Plus
@@ -61,7 +61,6 @@ def tokenizer(text):
     
     return listToStr
 
-def topNSimilarViolations(sim_matrix, n, violationId):
     """
     Returns the 'n' most similar violations for a 'violationId'
     'sim_matrix' is a similarity dataframe
@@ -92,6 +91,53 @@ def cosineSimilarityByViolation(tfidfMatrix):
         startrow = startrow + nrows
     
     return fullSimDf
+
+def word2vecCossim(model,corpus,goldCorpus,fullIndex,goldIndex,name):
+
+    now = datetime.now() # current date and time 
+    date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
+    print('Start time:', date_time)
+
+    termsim_index = WordEmbeddingSimilarityIndex(model)
+    dictionary = Dictionary(corpus) # Build the term dictionary
+    tfidf = TfidfModel(dictionary=dictionary) # Build the TF-IDF mapping
+    bow_corpus = [dictionary.doc2bow(document) for document in corpus]
+
+    # Build a sparse term similarity matrix using a term similarity index.
+    # dictionary – A dictionary that specifies a mapping between terms and
+    # the indices of rows and columns of the resulting term similarity matrix.
+    # tfidf - A model that specifies the relative importance of the terms in the dictionary.
+    # The columns of the term similarity matrix will be built in a decreasing order of importance of terms.
+
+    similarity_matrix = SparseTermSimilarityMatrix(termsim_index,
+                                                dictionary=dictionary,
+                                                tfidf=tfidf)
+
+    # Compute soft cosine similarity against a corpus of documents by storing the index matrix in memory.
+    # corpus – A list of documents in the BoW format.
+    # similarity_matrix – A term similarity matrix.
+
+    cossim_index = SoftCosineSimilarity(tfidf[bow_corpus], similarity_matrix)
+
+    cossim = pd.DataFrame(columns=fullIndex)
+
+    for document in tqdm(goldCorpus):
+        query_tf = tfidf[dictionary.doc2bow(document)]
+        doc_similarity_scores = cossim_index[query_tf]
+        try:
+            cossim = cossim.append(dict(zip(cossim.columns, doc_similarity_scores)), ignore_index=True)
+        except:
+            cossim = cossim.append(pd.Series(0, index=cossim.columns), ignore_index=True)
+    
+    if isinstance(goldIndex, pd.MultiIndex):
+        cossim.set_index(goldIndex, inplace=True)
+        cossim = cossim.groupby(level=1).mean()
+        cossim = cossim.T.groupby(level=1).mean()
+    else:
+        cossim['goldStdViolations'] = goldIndex
+        cossim.set_index(['goldStdViolations'], inplace=True)
+
+    cossim.to_csv(f"./results/{name}.csv")
 
 #engine = sal.create_engine('mssql+pyodbc://LAPTOP-NNDGMEMB/beth?driver=ODBC+Driver+13+for+SQL+Server?Trusted_Connection=yes')
 #conn = engine.connect()
@@ -173,57 +219,54 @@ data_orig['stemTextConcepts'] = data_orig['concepts'].apply(tokenizer_stemmer)
 data_orig['stemTextConceptsAndRelations'] = data_orig['conceptsAndRelations'].apply(tokenizer_stemmer)
 data_orig_sent['stemSentFull'] = data_orig_sent['regexCleanedText'].apply(tokenizer_stemmer)
 
-#### TF-IDF vectorization and Cosine Similarities ####
-
-#vectorizer
-vect = TfidfVectorizer(strip_accents=None,
-                       lowercase=False,
-                       max_df=0.8,
-                       min_df=1,
-                       tokenizer=None,
-                       analyzer='word',
-                       ngram_range=(2,3),
-                       vocabulary=None)
-
-textFull_tfidf = vect.fit_transform(data_orig['stemTextFull'])
-textConcepts_tfidf = vect.fit_transform(data_orig['stemTextConcepts'])
-textConceptsAndRelations_tfidf = vect.fit_transform(data_orig['stemTextConceptsAndRelations'])
-
 data_orig_sent_ = data_orig_sent.sort_values(by=['infracaoId']).reset_index(drop=True)
 data_orig_sent_ = data_orig_sent_.set_index([data_orig_sent_.index, 'infracaoId'])
 
-sentFull_tfidf = vect.fit_transform(data_orig_sent_['stemSentFull'])
+#### TF-IDF vectorization and Cosine Similarities ####
 
-textFull_cossim = pd.DataFrame(data=cosine_similarity(textFull_tfidf),
-                               index=data_orig['infracaoId'].tolist(),
-                               columns=data_orig['infracaoId'].tolist())
+#vectorizer
 
-textFull_cossim.to_csv("./results/tfidfTextFullCossim.csv")
+nGramRangeDict = {'UniBi': (1,2),
+                  'BiTri': (2,3)
+                 }
 
-textConcepts_cossim = pd.DataFrame(data=cosine_similarity(textConcepts_tfidf),
-                               index=data_orig['infracaoId'].tolist(),
-                               columns=data_orig['infracaoId'].tolist())
+docRepDict = {'Full': data_orig['stemTextFull'],
+              'Con': data_orig['stemTextConcepts'],
+              'ConRel': data_orig['stemTextConceptsAndRelations'],
+              'Sent': data_orig_sent_['stemSentFull']
+             }
 
-textConcepts_cossim.to_csv("./results/tfidfTextConceptsCossim.csv")
+for key, value in nGramRangeDict.items():
 
-textConceptsAndRelations_cossim = pd.DataFrame(data=cosine_similarity(textConceptsAndRelations_tfidf),
-                               index=data_orig['infracaoId'].tolist(),
-                               columns=data_orig['infracaoId'].tolist())
+    print(f'Creating TF-IDF vectorizer for ngramrange={str(value)}...')
+    
+    vect = TfidfVectorizer(lowercase=False, max_df=0.8, ngram_range=value)
+    
+    for k, v in docRepDict.items():
 
-textConceptsAndRelations_cossim.to_csv("./results/tfidfTextConceptsAndRelationsCossim.csv")
+        print(f'Transforming {k} document representation...')
 
-sentFull_cossim = cosineSimilarityByViolation(sentFull_tfidf)
+        tfidf = vect.fit_transform(v)
+        
+        print(f'Calculating cosine similarity for {k} document representation...')
 
-sentFull_cossim.to_csv("./results/tfidfSentFullCossim.csv")
-
-#### Loading the TF-IDF cosine similarities from files, if needed ####
-
-textFull_cossim = pd.read_csv("./results/tfidfTextFullCossim.csv", index_col=0)
-textConcepts_cossim = pd.read_csv("./results/tfidfTextConceptsCossim.csv", index_col=0)
-textConceptsAndRelations_cossim = pd.read_csv("./results/tfidfTextConceptsAndRelationsCossim.csv", index_col=0)
-sentFull_cossim = pd.read_csv("./results/tfidfSentFullCossim.csv", index_col=0)
+        if k == 'Sent':
+            cossim = cosineSimilarityByViolation(tfidf)
+        else:
+            cossim = pd.DataFrame(data=cosine_similarity(tfidf),
+                                index=data_orig['infracaoId'].tolist(),
+                                columns=data_orig['infracaoId'].tolist())
+        
+        cossim.to_csv(f'./results/tfidf_{key}_{k}.csv')
 
 #### Creating the corpora for training W2V, D2V, LDA and BM25 models ####
+
+docRepDict2 = {'FullNoStem': [document.split() for document in data_orig['regexCleanedText']],
+               'Full': [document.split() for document in data_orig['stemTextFull']],
+               'Con': [document.split() for document in data_orig['stemTextConcepts']],
+               'ConRel': [document.split() for document in data_orig['stemTextConceptsAndRelations']],
+               'Sent': [document.split() for document in data_orig_sent_['stemSentFull']]
+              }
 
 textFullNoStem_corpus = [document.split() for document in data_orig['regexCleanedText']]
 
@@ -232,7 +275,7 @@ textConcepts_corpus = [document.split() for document in data_orig['stemTextConce
 textConceptsAndRelations_corpus = [document.split() for document in data_orig['stemTextConceptsAndRelations']]
 sentFull_corpus = [document.split() for document in data_orig_sent_['stemSentFull']]
 
-#### Corpora that only includes the violations included in the gold standard ####
+#### Creating corpora that only includes the violations included in the gold standard ####
 
 goldStdViolations = pd.read_excel('vioWithData.xlsx')['infracaoId'].sort_values(ascending=True).to_list()
 
@@ -251,6 +294,13 @@ goldTextConceptsAndRelations_corpus = [document.split() for document in goldText
 goldSentFull_corpus = data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations), 'stemSentFull']
 goldSentFull_corpus = [document.split() for document in goldSentFull_corpus]
 
+docRepDict3 = {'FullNoStem': goldTextFullNoStem_corpus,
+               'Full': goldTextFull_corpus,
+               'Con': goldTextConcepts_corpus,
+               'ConRel': goldTextConceptsAndRelations_corpus,
+               'Sent': goldSentFull_corpus
+              }
+
 #### Word2Vec & Doc2Vec Models and Cosine Similarities ####
 
 # Loading a pre-trained Word2Vec model from NILC-USP (CBOW 300)
@@ -263,6 +313,77 @@ preTrainedCbow300_wordvectors = KeyedVectors.load('preTrainedCbow300.model')
 #del preTrainedCbow300
 
 # Training Word2Vec model from the existing complete corpus
+
+vectorSize = {
+    'v100': 100,
+    'v300': 300
+}
+
+method = {
+    'cbow': 0,
+    'skipGram': 1
+}
+
+for k1, v1 in docRepDict2.items():
+
+    for k2, v2 in vectorSize.items():
+
+        for k3, v3 in method.items():
+
+            print(f'Training Word2Vec for corpus {k1}, dimension {str(v2)} and method {k3} ...')
+
+            #if k1 != 'FullNoStem':
+            #    word2vec = Word2Vec(sentences=v1, size=v2, workers=8, min_count=3, sg=v3)
+            #    word2vec.save(f'./models/trained_{k3}_{k2}_{k1}.model')
+
+            if k1 == 'FullNoStem':
+                word2vec = KeyedVectors.load_word2vec_format(f'{k3}_s{str(v2)}.txt', binary=False)
+                word2vec.save(f'./models/preTrained_{k3}_{k2}_{k1}.model')
+
+# Loading Word2Vec models from the models folder
+
+for file in listdir('./models'):
+
+    absFile = path.abspath('./models/'+file)
+    
+    name = str(file).split('.')[0] + '_Cossim'
+    fullIndex = data_orig['infracaoId']
+    goldIndex = goldStdViolations
+
+    if 'preTrained' in str(file):
+        modelWv = KeyedVectors.load(absFile)
+        corpus = docRepDict2['FullNoStem']
+        goldCorpus = docRepDict3['FullNoStem']       
+
+    elif 'Full' in str(file):
+        model = Word2Vec.load(absFile)
+        modelWv = model.wv
+        corpus = docRepDict2['Full']
+        goldCorpus = docRepDict3['Full']
+
+    elif 'ConRel' in str(file):
+        model = Word2Vec.load(absFile)
+        modelWv = model.wv
+        corpus = docRepDict2['ConRel']
+        goldCorpus = docRepDict3['ConRel']
+    
+    elif 'Con' in str(file):
+        model = Word2Vec.load(absFile)
+        modelWv = model.wv
+        corpus = docRepDict2['Con']
+        goldCorpus = docRepDict3['Con']
+    
+    elif 'Sent' in str(file):
+        model = Word2Vec.load(absFile)
+        modelWv = model.wv
+        corpus = docRepDict2['Sent']
+        goldCorpus = docRepDict3['Sent']
+        fullIndex = data_orig_sent_.index
+        goldIndex = data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index
+
+    print(f"Calculating cossim for model {str(file).split('.')[0]} ...")
+   
+    word2vecCossim(modelWv,corpus,goldCorpus,fullIndex,goldIndex,name)
 
 #trainedCbowFull = Word2Vec(sentences=textFull_corpus, min_count=1, workers=4)
 #trainedCbowFull.save('trainedCbowFull.model')
@@ -580,9 +701,9 @@ for corpus,goldCorpus,fullIndex,goldIndex,name in zip(bm25plusCorpus,bm25plusGol
         scores['goldStdViolations'] = goldIndex
         scores.set_index(['goldStdViolations'], inplace=True)
 
-    scoresMin = scores.values.min()
-    scoresMax = scores.values.max()
-    scores = scores.applymap(lambda x: (x-scoresMin)/(scoresMax-scoresMin))
+    #scoresMin = scores.values.min()
+    #scoresMax = scores.values.max()
+    #scores = scores.applymap(lambda x: (x-scoresMin)/(scoresMax-scoresMin))
 
     bm25plusSim[name] = scores
 

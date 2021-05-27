@@ -1,0 +1,16 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Models
+models/
+.model
+.txt
+
+# NLTK
+nltk_data/
+
+
