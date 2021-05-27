@@ -6,8 +6,7 @@ __pycache__/
 .ipynb_checkpoints
 
 # Embeddings
-models/*.txt
-.txt
+*.txt
 
 # NLTK
 nltk_data/
