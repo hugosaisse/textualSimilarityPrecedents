@@ -12,6 +12,6 @@ __pycache__/
 nltk_data/
 
 # Model vectors
-*.models.vectors.npy
+.models.vectors.npy
 
 
