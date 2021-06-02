@@ -3,6 +3,7 @@ import numpy as np
 from os import listdir
 import pandas as pd
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score
+from tqdm import tqdm
 
 def topNSimilarViolations(simArray, n, violationId, threshold = 0):
     """
@@ -102,13 +103,13 @@ for modelName in vioScores.columns[:-4]:
     avgRecallList = []
     avgPrecisionList = []
     vioWithNoSimilar = set()
-    for N in range(1,11):
+    for N in tqdm(range(1,51)):
         recallList = []
         precisionList = []
         for violation in goldStdViolations:
             topNSimilar_model = topNSimilarViolations(vioScores[modelName], N, violation)
-            topNSimilar_experts = topNSimilarViolations(vioScores['expMean'], N, violation)
-            totalSimilar_experts = topNSimilarViolations(vioScores['expMean'], 50, violation)
+            topNSimilar_experts = topNSimilarViolations(vioScores['expMean'], N, violation, 2.5)
+            totalSimilar_experts = topNSimilarViolations(vioScores['expMean'], 50, violation, 2.5)
             Num = len(set(topNSimilar_model.index).intersection(set(totalSimilar_experts.index)))
             #recallDen = len(topNSimilar_experts.index)
             recallDen = len(totalSimilar_experts.index)

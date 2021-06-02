@@ -139,6 +139,28 @@ def word2vecCossim(model,corpus,goldCorpus,fullIndex,goldIndex,name):
 
     cossim.to_csv(f"./results/{name}.csv")
 
+def doc2vecCossim(model, corpus, index, name):
+
+    print('Calculating ', name)
+    now = datetime.now() # current date and time 
+    date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
+    print('Start time:', date_time)
+    
+    docEmbeddings = np.zeros((len(corpus),model.vector_size))
+
+    for j, doc in enumerate(corpus):
+        docEmbeddings[j] = model.infer_vector(doc_words=doc, steps=20, alpha=0.025)
+
+    doc2vecModelsCossim = pd.DataFrame(data=cosine_similarity(docEmbeddings),
+                                          index=index,
+                                          columns=index)
+
+    if isinstance(index, pd.MultiIndex):
+        doc2vecModelsCossim = doc2vecModelsCossim.groupby(level=1).mean()
+        doc2vecModelsCossim = doc2vecModelsCossim.T.groupby(level=1).mean()
+
+    doc2vecModelsCossim.to_csv("./results/" + name + ".csv")
+
 #engine = sal.create_engine('mssql+pyodbc://LAPTOP-NNDGMEMB/beth?driver=ODBC+Driver+13+for+SQL+Server?Trusted_Connection=yes')
 #conn = engine.connect()
 #data = pd.read_sql_table('violations_content', conn)
@@ -303,25 +325,16 @@ docRepDict3 = {'FullNoStem': goldTextFullNoStem_corpus,
 
 #### Word2Vec & Doc2Vec Models and Cosine Similarities ####
 
-# Loading a pre-trained Word2Vec model from NILC-USP (CBOW 300)
-# Remember it matches full words instead of stemmed ones
-
-#preTrainedCbow300 = KeyedVectors.load_word2vec_format('../../Code/nilc_word2vec/cbow_s300.txt', binary=False)
-#preTrainedCbow300.save('preTrainedCbow300.model')
-#preTrainedCbow300 = Word2Vec.load('preTrainedCbow300.model')
-preTrainedCbow300_wordvectors = KeyedVectors.load('preTrainedCbow300.model')
-#del preTrainedCbow300
-
 # Training Word2Vec model from the existing complete corpus
 
 vectorSize = {
     'v100': 100,
-    'v300': 300
+    'v300': 300,
 }
 
 method = {
     'cbow': 0,
-    'skipGram': 1
+    'skipGram': 1,
 }
 
 for k1, v1 in docRepDict2.items():
@@ -332,17 +345,32 @@ for k1, v1 in docRepDict2.items():
 
             print(f'Training Word2Vec for corpus {k1}, dimension {str(v2)} and method {k3} ...')
 
-            #if k1 != 'FullNoStem':
-            #    word2vec = Word2Vec(sentences=v1, size=v2, workers=8, min_count=3, sg=v3)
-            #    word2vec.save(f'./models/trained_{k3}_{k2}_{k1}.model')
+            if k1 != 'FullNoStem':
+                word2vec = Word2Vec(sentences=v1, size=v2, workers=8, min_count=3, sg=v3)
+                word2vec.save(f'./models/trained_{k3}_{k2}_{k1}.model')
 
             if k1 == 'FullNoStem':
-                word2vec = KeyedVectors.load_word2vec_format(f'{k3}_s{str(v2)}.txt', binary=False)
+                word2vec = KeyedVectors.load_word2vec_format(f'./models/{k3}_s{str(v2)}.txt', binary=False, unicode_errors='ignore')
                 word2vec.save(f'./models/preTrained_{k3}_{k2}_{k1}.model')
 
 # Loading Word2Vec models from the models folder
 
-for file in listdir('./models'):
+for file in [f for f in listdir('./models/pretrained') if f.endswith('.model')]:
+
+    absFile = path.abspath('./models/pretrained/'+file)
+    
+    name = str(file).split('.')[0] + '_Cossim'
+    fullIndex = data_orig['infracaoId']
+    goldIndex = goldStdViolations
+    modelWv = KeyedVectors.load(absFile)
+    corpus = docRepDict2['FullNoStem']
+    goldCorpus = docRepDict3['FullNoStem']
+
+    print(f"Calculating cossim for model {str(file).split('.')[0]} ...")
+   
+    word2vecCossim(modelWv,corpus,goldCorpus,fullIndex,goldIndex,name)
+
+for file in [f for f in listdir('./models/') if f.endswith('.model')]:
 
     absFile = path.abspath('./models/'+file)
     
@@ -350,12 +378,7 @@ for file in listdir('./models'):
     fullIndex = data_orig['infracaoId']
     goldIndex = goldStdViolations
 
-    if 'preTrained' in str(file):
-        modelWv = KeyedVectors.load(absFile)
-        corpus = docRepDict2['FullNoStem']
-        goldCorpus = docRepDict3['FullNoStem']       
-
-    elif 'Full' in str(file):
+    if 'Full' in str(file):
         model = Word2Vec.load(absFile)
         modelWv = model.wv
         corpus = docRepDict2['Full']
@@ -385,212 +408,57 @@ for file in listdir('./models'):
    
     word2vecCossim(modelWv,corpus,goldCorpus,fullIndex,goldIndex,name)
 
-#trainedCbowFull = Word2Vec(sentences=textFull_corpus, min_count=1, workers=4)
-#trainedCbowFull.save('trainedCbowFull.model')
-trainedCbowFull = Word2Vec.load('trainedCbowFull.model')
-trainedCbowFull_wordvectors = trainedCbowFull.wv
+# Training Doc2Vec models 
 
-# Training Word2Vec model from the existing concepts corpus
+docRepDict4 = {'Full': [document.split() for document in data_orig['stemTextFull']],
+               'Con': [document.split() for document in data_orig['stemTextConcepts']],
+               'ConRel': [document.split() for document in data_orig['stemTextConceptsAndRelations']],
+               'Sent': [document.split() for document in data_orig_sent_['stemSentFull']]
+              }
 
-#trainedCbowConcepts = Word2Vec(sentences=textConcepts_corpus, min_count=1, workers=8)
-#trainedCbowConcepts.save('trainedCbowConcepts.model')
-trainedCbowConcepts = Word2Vec.load('trainedCbowConcepts.model')
-trainedCbowConcepts_wordvectors = trainedCbowConcepts.wv
+vectorSize = {
+    'v100': 100,
+    'v200': 200,
+    'v300': 300,
+}
 
-# Training Word2Vec model from the existing concepts and relations corpus
+for k1, v1 in docRepDict4.items():
 
-#trainedCbowConceptsAndRelations = Word2Vec(sentences=textConceptsAndRelations_corpus, min_count=1, workers=8)
-#trainedCbowConceptsAndRelations.save('trainedCbowConceptsAndRelations.model')
-trainedCbowConceptsAndRelations = Word2Vec.load('trainedCbowConceptsAndRelations.model')
-trainedCbowConceptsAndRelations_wordvectors = trainedCbowConceptsAndRelations.wv
+    for k2, v2 in vectorSize.items():
 
-# Training Word2Vec model from the existing sentences corpus
+        print(f'Training Doc2Vec for corpus {k1}, dimension {str(v2)} ...')
 
-#trainedCbowSent = Word2Vec(sentences=sentFull_corpus, min_count=1, workers=8)
-#trainedCbowSent.save('trainedCbowSent.model')
-trainedCbowSent = Word2Vec.load('trainedCbowSent.model')
-trainedCbowSent_wordvectors = trainedCbowSent.wv
+        documents = [TaggedDocument(doc, [i]) for i, doc in enumerate(v1)]
+        doc2vec = Doc2Vec(documents, min_count=3, workers=8, size=v2)
+        doc2vec.save(f'./models/doc2vec/doc2vec_{k2}_{k1}.model')
 
-# Training a Doc2Vec model from the existing complete corpus
+# Loading Doc2Vec models from the models/doc2vec folder
+# and compute the cross-document cosine similarity using the doc2vec models
 
-#documents = [TaggedDocument(doc, [i]) for i, doc in enumerate(textFull_corpus)]
-#trainedDoc2VecFull = Doc2Vec(documents, min_count=1, workers=8)
-#trainedDoc2VecFull.save('trainedDoc2VecFull.model')
-trainedDoc2VecFull = Doc2Vec.load('trainedDoc2VecFull.model')
+for file in [f for f in listdir('./models/doc2vec') if f.endswith('.model')]:
 
-# Training a Doc2Vec model from the existing concepts corpus
-
-#documents = [TaggedDocument(doc, [i]) for i, doc in enumerate(textConcepts_corpus)]
-#trainedDoc2VecConcepts = Doc2Vec(documents, min_count=1, workers=8)
-#trainedDoc2VecConcepts.save('trainedDoc2VecConcepts.model')
-trainedDoc2VecConcepts = Doc2Vec.load('trainedDoc2VecConcepts.model')
-
-# Training a Doc2Vec model from the existing concepts and relations corpus
-
-#documents = [TaggedDocument(doc, [i]) for i, doc in enumerate(textConceptsAndRelations_corpus)]
-#trainedDoc2VecConceptsAndRelations = Doc2Vec(documents, min_count=1, workers=8)
-#trainedDoc2VecConceptsAndRelations.save('trainedDoc2VecConceptsAndRelations.model')
-trainedDoc2VecConceptsAndRelations = Doc2Vec.load('trainedDoc2VecConceptsAndRelations.model')
-
-# Training a Doc2Vec model from the sentences corpus
-
-#documents = [TaggedDocument(doc, [i]) for i, doc in enumerate(sentFull_corpus)]
-#trainedDoc2VecSent = Doc2Vec(documents, min_count=1, workers=4)
-#trainedDoc2VecSent.save('trainedDoc2VecSent.model')
-trainedDoc2VecSent = Doc2Vec.load('trainedDoc2VecSent.model')
-
-# Creating lists of models and respective evaluation corpus
-
-word2vecModels = [#trainedCbowFull_wordvectors,
-                  #trainedCbowConcepts_wordvectors,
-                  #trainedCbowConceptsAndRelations_wordvectors,
-                  #preTrainedCbow300_wordvectors,
-                  trainedCbowSent_wordvectors,
-                 ]
-
-word2vecCorpus = [#textFull_corpus,
-                  #textConcepts_corpus,
-                  #textConceptsAndRelations_corpus,
-                  #textFullNoStem_corpus,
-                  sentFull_corpus,
-                 ]
-
-word2vecGoldCorpus = [#goldTextFull_corpus,
-                      #goldTextConcepts_corpus,
-                      #goldTextConceptsAndRelations_corpus,
-                      #goldTextFullNoStem_corpus,
-                      goldSentFull_corpus,
-                     ]
-
-fullCorpusIndexes = [#data_orig['infracaoId'],
-                     #data_orig['infracaoId'],
-                     #data_orig['infracaoId'],
-                     #data_orig['infracaoId'],
-                     data_orig_sent_.index,
-                    ]
-
-goldCorpusIndexes = [#goldStdViolations,
-                     #goldStdViolations,
-                     #goldStdViolations,
-                     #goldStdViolations,
-                     data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index,
-                    ]
-
-word2vecCossimNames = [#'trainedCbowFullCossim',
-                       #'trainedCbowConceptsCossim',
-                       #'trainedCbowConceptsAndRelationsCossim',
-                       #'preTrainedCbow300Cossim',
-                       'trainedCbowSentCossim',
-                      ]
-
-# Compute the cross-document cosine similarity using the word2vec models
-
-word2vecModelsCossim = {}
-
-#manager = Manager()
-#word2vecModelsCossim = manager.dict()
-
-#with concurrent.futures.ThreadPoolExecutor() as executor:
-
-for model,corpus,goldCorpus,fullIndex,goldIndex,name in zip(word2vecModels,word2vecCorpus,word2vecGoldCorpus,
-                                                            fullCorpusIndexes,goldCorpusIndexes,word2vecCossimNames):
+    absFile = path.abspath('./models/doc2vec/'+file)
     
-    print('Calculating ', name)
-    now = datetime.now() # current date and time 
-    date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
-    print('Start time:', date_time)
+    name = str(file).split('.')[0] + '_Cossim'
+    index = goldStdViolations
+    model = Doc2Vec.load(absFile)
 
-    termsim_index = WordEmbeddingSimilarityIndex(model)
-    dictionary = Dictionary(corpus) # Build the term dictionary
-    tfidf = TfidfModel(dictionary=dictionary) # Build the TF-IDF mapping
-    bow_corpus = [dictionary.doc2bow(document) for document in corpus]
+    if 'Full' in str(file):
+        corpus = goldTextFull_corpus
 
-    # Build a sparse term similarity matrix using a term similarity index.
-    # dictionary – A dictionary that specifies a mapping between terms and
-    # the indices of rows and columns of the resulting term similarity matrix.
-    # tfidf - A model that specifies the relative importance of the terms in the dictionary.
-    # The columns of the term similarity matrix will be built in a decreasing order of importance of terms.
-
-    similarity_matrix = SparseTermSimilarityMatrix(termsim_index,
-                                                dictionary=dictionary,
-                                                tfidf=tfidf)
-
-    # Compute soft cosine similarity against a corpus of documents by storing the index matrix in memory.
-    # corpus – A list of documents in the BoW format.
-    # similarity_matrix – A term similarity matrix.
-
-    cossim_index = SoftCosineSimilarity(tfidf[bow_corpus], similarity_matrix)
-
-    cossim = pd.DataFrame(columns=fullIndex)
-
-    for document in tqdm(goldCorpus):
-        query_tf = tfidf[dictionary.doc2bow(document)]
-        doc_similarity_scores = cossim_index[query_tf]
-        try:
-            cossim = cossim.append(dict(zip(cossim.columns, doc_similarity_scores)), ignore_index=True)
-        except:
-            cossim = cossim.append(pd.Series(0, index=cossim.columns), ignore_index=True)
+    elif 'ConRel' in str(file):
+        corpus = goldTextConceptsAndRelations_corpus
     
-    if isinstance(goldIndex, pd.MultiIndex):
-        cossim.set_index(goldIndex, inplace=True)
-        cossim = cossim.groupby(level=1).mean()
-        cossim = cossim.T.groupby(level=1).mean()
-    else:
-        cossim['goldStdViolations'] = goldIndex
-        cossim.set_index(['goldStdViolations'], inplace=True)
-
-    word2vecModelsCossim[name] = cossim
-
-    word2vecModelsCossim[name].to_csv("./results/" + name + ".csv")
-
-# Compute the cross-document cosine similarity using the doc2vec models
-
-doc2vecModels = [trainedDoc2VecSent,
-                 trainedDoc2VecFull,
-                 trainedDoc2VecConcepts,
-                 trainedDoc2VecConceptsAndRelations]
-
-doc2vecCorpus = [goldSentFull_corpus,
-                 goldTextFull_corpus,
-                 goldTextConcepts_corpus,
-                 goldTextConceptsAndRelations_corpus]
-
-doc2vecIndexes = [data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index,
-                  goldStdViolations,
-                  goldStdViolations,
-                  goldStdViolations]
-
-doc2vecCossimNames = ['trainedDoc2VecSentCossim',
-                      'trainedDoc2VecFullCossim',
-                      'trainedDoc2VecConceptsCossim',
-                      'trainedDoc2VecConceptsAndRelationsCossim']
-
-doc2vecModelsEmbeddings = {}
-doc2vecModelsCossim = {}
-
-for model, corpus, index, name in zip(doc2vecModels,doc2vecCorpus,doc2vecIndexes,doc2vecCossimNames):
-
-    print('Calculating ', name)
-    now = datetime.now() # current date and time 
-    date_time = now.strftime("%d/%m/%Y, %H:%M:%S")
-    print('Start time:', date_time)
+    elif 'Con' in str(file):
+        corpus = goldTextConcepts_corpus
     
-    docEmbeddings = np.zeros((len(corpus),model.vector_size))
+    elif 'Sent' in str(file):
+        corpus = goldSentFull_corpus
+        index = data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index
 
-    for j, doc in enumerate(corpus):
-        docEmbeddings[j] = model.infer_vector(doc_words=doc, steps=20, alpha=0.025)
-
-    doc2vecModelsEmbeddings[name] = docEmbeddings
-
-    doc2vecModelsCossim[name] = pd.DataFrame(data=cosine_similarity(doc2vecModelsEmbeddings[name]),
-                                          index=index,
-                                          columns=index)
-
-    if isinstance(index, pd.MultiIndex):
-        doc2vecModelsCossim[name] = doc2vecModelsCossim[name].groupby(level=1).mean()
-        doc2vecModelsCossim[name] = doc2vecModelsCossim[name].T.groupby(level=1).mean()
-
-    doc2vecModelsCossim[name].to_csv("./results/" + name + ".csv")   
+    print(f"Calculating cossim for model {str(file).split('.')[0]} ...")
+   
+    doc2vecCossim(model, corpus, index, name)
 
 #### LDA models and Cosine Similarities ####
 
