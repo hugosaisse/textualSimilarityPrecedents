@@ -462,22 +462,10 @@ for file in [f for f in listdir('./models/doc2vec') if f.endswith('.model')]:
 
 #### LDA models and Cosine Similarities ####
 
-ldaCorpus = [textFull_corpus,
-             textConcepts_corpus,
-             textConceptsAndRelations_corpus,
-             sentFull_corpus
-            ]
-
 ldaGoldCorpus = [goldTextFull_corpus,
                  goldTextConcepts_corpus,
                  goldTextConceptsAndRelations_corpus,
                  goldSentFull_corpus,]
-
-fullCorpusIndexes = [data_orig['infracaoId'],
-                     data_orig['infracaoId'],
-                     data_orig['infracaoId'],
-                     data_orig_sent_.index,
-                    ]
 
 goldCorpusIndexes = [goldStdViolations,
                      goldStdViolations,
