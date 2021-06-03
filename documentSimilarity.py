@@ -496,18 +496,18 @@ nTopicsList = [10, 20, 40, 80]
 ldaModels = {}
 ldaSim = {}
 
-for corpus,goldCorpus,fullIndex,goldIndex,name in zip(ldaCorpus,ldaGoldCorpus,fullCorpusIndexes,
-                                                      goldCorpusIndexes,ldaCossimNames):
+common_dictionary = Dictionary(textFull_corpus)
+common_corpus = [common_dictionary.doc2bow(document) for document in textFull_corpus]
+
+for goldCorpus,goldIndex,name in zip(ldaGoldCorpus,goldCorpusIndexes,ldaCossimNames):
     
-    common_dictionary = Dictionary(corpus)
-    common_corpus = [common_dictionary.doc2bow(document) for document in corpus]
     gold_corpus = [common_dictionary.doc2bow(document) for document in goldCorpus]
     for n in nTopicsList:
         ldaModels[(name, n)] = LdaModel(common_corpus, num_topics=n)
 
         ix = MatrixSimilarity(ldaModels[(name, n)][common_corpus])
 
-        scores = pd.DataFrame(columns=fullIndex)
+        scores = pd.DataFrame(columns=data_orig['infracaoId'])
         
         for document in tqdm(gold_corpus):
             vector = ldaModels[(name, n)][document]
