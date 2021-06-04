@@ -46,8 +46,8 @@ for file in listdir('./results'):
 #### include the experts evaluations for each pair in the vioScores dataframe
 
 evaluations = []
-for file in listdir('./goldStandardViolations/expertsEvaluations'):
-    evaluations.append(pd.read_excel("./goldStandardViolations/expertsEvaluations/" + file, sheet_name='Similaridade'))
+for file in listdir('./goldStandardViolations_/expertsEvaluations'):
+    evaluations.append(pd.read_excel("./goldStandardViolations_/expertsEvaluations/" + file, sheet_name='Similaridade'))
 
 for i, evaluation in enumerate(evaluations):
     scoresList = []

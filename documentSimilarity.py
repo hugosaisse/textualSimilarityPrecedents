@@ -263,12 +263,14 @@ for key, value in nGramRangeDict.items():
     print(f'Creating TF-IDF vectorizer for ngramrange={str(value)}...')
     
     vect = TfidfVectorizer(lowercase=False, max_df=0.8, ngram_range=value)
+    vect = vect.fit(docRepDict['Full'])
     
     for k, v in docRepDict.items():
 
         print(f'Transforming {k} document representation...')
 
-        tfidf = vect.fit_transform(v)
+        tfidf = vect.transform(v)
+        #tfidf = vect.fit_transform(v)
         
         print(f'Calculating cosine similarity for {k} document representation...')
 
@@ -355,6 +357,8 @@ for k1, v1 in docRepDict2.items():
 
 # Loading Word2Vec models from the models folder
 
+# Vectorizing from the pretrained NILC-USP models
+
 for file in [f for f in listdir('./models/pretrained') if f.endswith('.model')]:
 
     absFile = path.abspath('./models/pretrained/'+file)
@@ -369,6 +373,8 @@ for file in [f for f in listdir('./models/pretrained') if f.endswith('.model')]:
     print(f"Calculating cossim for model {str(file).split('.')[0]} ...")
    
     word2vecCossim(modelWv,corpus,goldCorpus,fullIndex,goldIndex,name)
+
+# Vectorizing from the corpora trained models
 
 for file in [f for f in listdir('./models/') if f.endswith('.model')]:
 
@@ -407,6 +413,50 @@ for file in [f for f in listdir('./models/') if f.endswith('.model')]:
     print(f"Calculating cossim for model {str(file).split('.')[0]} ...")
    
     word2vecCossim(modelWv,corpus,goldCorpus,fullIndex,goldIndex,name)
+
+# Vectorizing from the full corpus trained models
+
+for file in [f for f in listdir('./models/') if f.endswith('Full.model')]:
+
+    absFile = path.abspath('./models/'+file)
+    
+    name = str(file).split('.')[0] + '_Cossim'
+    fullIndex = data_orig['infracaoId']
+    goldIndex = goldStdViolations
+    model = Word2Vec.load(absFile)
+    modelWv = model.wv
+
+    for corpus, goldCorpus in zip(docRepDict2.keys(), )
+
+    if 'Full' in str(file):
+        
+        corpus = docRepDict2['Full']
+        goldCorpus = docRepDict3['Full']
+
+    elif 'ConRel' in str(file):
+        model = Word2Vec.load(absFile)
+        modelWv = model.wv
+        corpus = docRepDict2['ConRel']
+        goldCorpus = docRepDict3['ConRel']
+    
+    elif 'Con' in str(file):
+        model = Word2Vec.load(absFile)
+        modelWv = model.wv
+        corpus = docRepDict2['Con']
+        goldCorpus = docRepDict3['Con']
+    
+    elif 'Sent' in str(file):
+        model = Word2Vec.load(absFile)
+        modelWv = model.wv
+        corpus = docRepDict2['Sent']
+        goldCorpus = docRepDict3['Sent']
+        fullIndex = data_orig_sent_.index
+        goldIndex = data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index
+
+    print(f"Calculating cossim for model {str(file).split('.')[0]} ...")
+   
+    word2vecCossim(modelWv,corpus,goldCorpus,fullIndex,goldIndex,name)
+
 
 # Training Doc2Vec models 
 
@@ -462,6 +512,17 @@ for file in [f for f in listdir('./models/doc2vec') if f.endswith('.model')]:
 
 #### LDA models and Cosine Similarities ####
 
+fullCorpus = [textFull_corpus,
+              textConcepts_corpus,
+              textConceptsAndRelations_corpus,
+              sentFull_corpus]
+
+fullCorpusIndexes = [data_orig['infracaoId'],
+                     data_orig['infracaoId'],
+                     data_orig['infracaoId'],
+                     data_orig_sent_.index,
+                    ]
+
 ldaGoldCorpus = [goldTextFull_corpus,
                  goldTextConcepts_corpus,
                  goldTextConceptsAndRelations_corpus,
@@ -473,10 +534,10 @@ goldCorpusIndexes = [goldStdViolations,
                      data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index,
                     ]
 
-ldaCossimNames = ['trainedLDAFullCossim',
-                  'trainedLDAConceptsCossim',
-                  'trainedLDAConceptsAndRelationsCossim',
-                  'trainedLDASentCossim',
+ldaCossimNames = ['LDAFullCossim',
+                  'LDAConceptsCossim',
+                  'LDAConceptsAndRelationsCossim',
+                  'LDASentCossim',
                  ]
 
 nTopicsList = [10, 20, 40, 80]
@@ -487,7 +548,10 @@ ldaSim = {}
 common_dictionary = Dictionary(textFull_corpus)
 common_corpus = [common_dictionary.doc2bow(document) for document in textFull_corpus]
 
-for goldCorpus,goldIndex,name in zip(ldaGoldCorpus,goldCorpusIndexes,ldaCossimNames):
+for corpus,index,goldCorpus,goldIndex,name in zip(fullCorpus,fullCorpusIndexes,ldaGoldCorpus,goldCorpusIndexes,ldaCossimNames):
+    
+    #common_dictionary = Dictionary(corpus)
+    #common_corpus = [common_dictionary.doc2bow(document) for document in corpus]
     
     gold_corpus = [common_dictionary.doc2bow(document) for document in goldCorpus]
     for n in nTopicsList:
@@ -495,7 +559,7 @@ for goldCorpus,goldIndex,name in zip(ldaGoldCorpus,goldCorpusIndexes,ldaCossimNa
 
         ix = MatrixSimilarity(ldaModels[(name, n)][common_corpus])
 
-        scores = pd.DataFrame(columns=data_orig['infracaoId'])
+        scores = pd.DataFrame(columns=index)
         
         for document in tqdm(gold_corpus):
             vector = ldaModels[(name, n)][document]
@@ -536,9 +600,11 @@ bm25plusNames = ['BM25PlusFull',
 
 bm25plusSim = {}
 
+bm25plus = BM25Plus(textFull_corpus)
+
 for corpus,goldCorpus,fullIndex,goldIndex,name in zip(bm25plusCorpus,bm25plusGoldCorpus,fullCorpusIndexes,
                                                       goldCorpusIndexes,bm25plusNames):
-    bm25plus = BM25Plus(corpus)
+    #bm25plus = BM25Plus(corpus)
     
     scores = pd.DataFrame(columns=fullIndex)
     
