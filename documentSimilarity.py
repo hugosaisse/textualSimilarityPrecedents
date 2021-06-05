@@ -417,45 +417,36 @@ for file in [f for f in listdir('./models/') if f.endswith('.model')]:
 # Vectorizing from the full corpus trained models
 
 for file in [f for f in listdir('./models/') if f.endswith('Full.model')]:
-
+  
     absFile = path.abspath('./models/'+file)
     
-    name = str(file).split('.')[0] + '_Cossim'
     fullIndex = data_orig['infracaoId']
     goldIndex = goldStdViolations
     model = Word2Vec.load(absFile)
     modelWv = model.wv
 
-    for corpus, goldCorpus in zip(docRepDict2.keys(), )
-
-    if 'Full' in str(file):
-        
-        corpus = docRepDict2['Full']
-        goldCorpus = docRepDict3['Full']
-
-    elif 'ConRel' in str(file):
-        model = Word2Vec.load(absFile)
-        modelWv = model.wv
-        corpus = docRepDict2['ConRel']
-        goldCorpus = docRepDict3['ConRel']
-    
-    elif 'Con' in str(file):
-        model = Word2Vec.load(absFile)
-        modelWv = model.wv
-        corpus = docRepDict2['Con']
-        goldCorpus = docRepDict3['Con']
-    
-    elif 'Sent' in str(file):
-        model = Word2Vec.load(absFile)
-        modelWv = model.wv
-        corpus = docRepDict2['Sent']
-        goldCorpus = docRepDict3['Sent']
-        fullIndex = data_orig_sent_.index
-        goldIndex = data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index
-
     print(f"Calculating cossim for model {str(file).split('.')[0]} ...")
-   
-    word2vecCossim(modelWv,corpus,goldCorpus,fullIndex,goldIndex,name)
+
+    for keyCorpus, keyGoldCorpus in zip(list(docRepDict2.keys())[1:], list(docRepDict3.keys())[1:]):
+        
+        name = str(file).split('.')[0] + '_' + str(keyCorpus) + '_Cossim'
+
+        if path.exists("./results/" + name + ".csv"):
+            continue
+
+        corpus = docRepDict2[keyCorpus]
+        goldCorpus = docRepDict3[keyCorpus]
+
+        if keyCorpus == 'Sent':
+            
+            fullIndex = data_orig_sent_.index
+            goldIndex = data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index
+
+        
+
+        print(f"Calculating cossim for corpus {str(keyCorpus)} ...")
+    
+        word2vecCossim(modelWv,corpus,goldCorpus,fullIndex,goldIndex,name)
 
 
 # Training Doc2Vec models 
