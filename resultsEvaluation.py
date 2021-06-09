@@ -1,6 +1,6 @@
 from itertools import combinations, permutations
 import numpy as np
-from os import listdir
+from os import listdir, walk
 import pandas as pd
 from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score
 from tqdm import tqdm
@@ -42,6 +42,109 @@ for file in listdir('./results'):
     for pair in vioScores.index:
         scoresList.append(fileDf.loc[pair[0],str(pair[1])])
     vioScores[file.split('.')[0]] = scoresList
+
+#### For each file in the results folder
+
+modelDescr = pd.DataFrame(columns=['Model',
+                                   'Training Corpus',
+                                   'Evaluation Corpus',
+                                   'Topics',
+                                   'Dimensions',
+                                   'Algorithm',
+                                   'N-Grams'])
+
+for t in walk('./results'):
+    folder = t[0]
+    subfolders = t[1]
+    files = t[2]
+
+    for file in files:
+        print(f'Processing file {folder}/{file}')
+        fileDf = pd.read_csv(f'{folder}/{file}', index_col=0)
+        scoresList = []
+        for pair in vioScores.index:
+            scoresList.append(fileDf.loc[pair[0],str(pair[1])])
+        vioScores[folder+file.split('.')[0]] = scoresList
+        
+        descrList = []
+        #Model
+        if any(x in file for x in ['skipGram','cbow','preTrained']):
+            descrList.append('Word2Vec')
+        elif 'doc2vec' in file:
+            descrList.append('Doc2Vec')
+        elif 'LDA' in file:
+            descrList.append('LDA')
+        elif 'tfidf' in file:
+            descrList.append('TF-IDF')
+        elif 'BM25' in file:
+            descrList.append('BM25')
+        else:
+            descrList.append('-')
+        
+        #Training corpus
+        if 'preTrained' in file:
+            descrList.append('Full (No Stemming)')
+        elif 'trainedOnFullCorpus' in folder:
+            descrList.append('Full')
+        elif 'trainedOnCorpus' in folder:
+            if any(x in file for x in ['ConRel','ConceptsAndRelations']):
+                descrList.append('Concepts & Relations')
+            elif any(x in file for x in ['Con','Concepts']):
+                descrList.append('Concepts')
+            elif 'Sent' in file:
+                descrList.append('Sentences')
+            elif 'Full' in file:
+                descrList.append('Full')
+            else:
+                descrList.append('-')
+        else:
+            descrList.append('-')
+        
+        #Evaluation corpus
+        if 'preTrained' in file:
+            descrList.append('Full (No Stemming)')
+        elif any(x in file for x in ['ConRel','ConceptsAndRelations']):
+            descrList.append('Concepts & Relations')
+        elif any(x in file for x in ['Con','Concepts']):
+            descrList.append('Concepts')
+        elif 'Sent' in file:
+            descrList.append('Sentences')
+        elif 'Full' in file:
+            descrList.append('Full')
+        else:
+            descrList.append('-')
+        
+        #Topics
+        pos = file.find('topics')
+        if pos != -1:
+            descrList.append(file[pos-2:pos])
+        else:
+            descrList.append('-')
+        
+        #Dimensions
+        pos = file.find('00_')
+        if pos != -1:
+            descrList.append(file[pos-1:pos+2])
+        else:
+            descrList.append('-')
+        
+        #Algorithm
+        if 'skipGram' in file:
+            descrList.append('Skip-Gram')
+        elif 'cbow' in file:
+            descrList.append('CBOW')
+        else:
+            descrList.append('-')
+
+        #N-Grams
+        if 'UniBi' in file:
+            descrList.append('Unigrams and Bigrams')
+        elif 'BiTri' in file:
+            descrList.append('Bigrams and Trigrams')
+        else:
+            descrList.append('-')
+
+        modelDescr.loc[len(modelDescr)] = descrList
 
 #### include the experts evaluations for each pair in the vioScores dataframe
 
@@ -98,48 +201,61 @@ def isInTopN(row, modelName, N):
     else:
         return 0
 
-results = pd.DataFrame(index=vioScores.columns[:-4], columns=['mAR', 'recall@5', 'mAP', 'precision@5'])
-for modelName in vioScores.columns[:-4]:
-    avgRecallList = []
-    avgPrecisionList = []
-    vioWithNoSimilar = set()
-    for N in tqdm(range(1,51)):
-        recallList = []
-        precisionList = []
-        for violation in goldStdViolations:
-            topNSimilar_model = topNSimilarViolations(vioScores[modelName], N, violation)
-            topNSimilar_experts = topNSimilarViolations(vioScores['expMean'], N, violation, 2.5)
-            totalSimilar_experts = topNSimilarViolations(vioScores['expMean'], 50, violation, 2.5)
-            Num = len(set(topNSimilar_model.index).intersection(set(totalSimilar_experts.index)))
-            #recallDen = len(topNSimilar_experts.index)
-            recallDen = len(totalSimilar_experts.index)
-            precisionDen = len(topNSimilar_model.index)
-            if recallDen == 0:
-                recall = 1
-                vioWithNoSimilar.add(violation)
-            else:
-                recall = Num/recallDen
-            if precisionDen == 0 & len(topNSimilar_experts.index) != 0:
-                precision = 0
-            elif precisionDen == 0 & len(topNSimilar_experts.index) == 0:
-                precision = 1
-            else:
-                precision = Num/precisionDen
-            recallList.append(recall)
-            precisionList.append(precision)
+def calculateMetrics(vioScores, expColumn):
 
-        avgRecall = np.mean(recallList)
-        avgPrecision = np.mean(precisionList)
-        avgRecallList.append(avgRecall)
-        avgPrecisionList.append(avgPrecision)
-        if N == 5:
-            results.at[modelName, 'recall@5'] = avgRecall
-            results.at[modelName, 'precision@5'] = avgPrecision
-    meanAvgRecall = np.mean(avgRecallList)
-    meanAvgPrecision = np.mean(avgPrecisionList)
-    results.at[modelName, 'mAR'] = meanAvgRecall
-    results.at[modelName, 'mAP'] = meanAvgPrecision
-results['f1'] = (2*results['mAR']*results['mAP'])/(results['mAR']+results['mAP'])
+    results = pd.DataFrame(index=vioScores.columns[:-4], columns=['mAR', 'recall@5', 'mAP', 'precision@5'])
+    for modelName in vioScores.columns[:-4]:
+        avgRecallList = []
+        avgPrecisionList = []
+        vioWithNoSimilar = set()
+        for N in tqdm(range(1,51)):
+            recallList = []
+            precisionList = []
+            for violation in goldStdViolations:
+                topNSimilar_model = topNSimilarViolations(vioScores[modelName], N, violation)
+                topNSimilar_experts = topNSimilarViolations(vioScores[expColumn], N, violation)
+                totalSimilar_experts = topNSimilarViolations(vioScores[expColumn], 50, violation)
+                Num = len(set(topNSimilar_model.index).intersection(set(totalSimilar_experts.index)))
+                #recallDen = len(topNSimilar_experts.index)
+                recallDen = len(totalSimilar_experts.index)
+                precisionDen = len(topNSimilar_model.index)
+                if recallDen == 0:
+                    recall = 1
+                    vioWithNoSimilar.add(violation)
+                else:
+                    recall = Num/recallDen
+                if precisionDen == 0 & len(topNSimilar_experts.index) != 0:
+                    precision = 0
+                elif precisionDen == 0 & len(topNSimilar_experts.index) == 0:
+                    precision = 1
+                else:
+                    precision = Num/precisionDen
+                recallList.append(recall)
+                precisionList.append(precision)
+
+            avgRecall = np.mean(recallList)
+            avgPrecision = np.mean(precisionList)
+            avgRecallList.append(avgRecall)
+            avgPrecisionList.append(avgPrecision)
+            if N == 5:
+                results.at[modelName, 'recall@5'] = avgRecall
+                results.at[modelName, 'precision@5'] = avgPrecision
+        meanAvgRecall = np.mean(avgRecallList)
+        meanAvgPrecision = np.mean(avgPrecisionList)
+        results.at[modelName, 'mAR'] = meanAvgRecall
+        results.at[modelName, 'mAP'] = meanAvgPrecision
+    results['f1'] = (2*results['mAR']*results['mAP'])/(results['mAR']+results['mAP'])
+
+    return results
+
+expColumns = vioScores.columns[-4:].tolist()
+expResults = {}
+
+for expColumn in expColumns:
+    result = calculateMetrics(vioScores, expColumn)
+    result = pd.concat([modelDescr.set_index(result.index), result], axis=1)
+    expResults[expColumn] = result
+    result.to_csv(expColumn + '.csv')
 
 
      

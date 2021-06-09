@@ -498,8 +498,37 @@ for file in [f for f in listdir('./models/doc2vec') if f.endswith('.model')]:
         index = data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index
 
     print(f"Calculating cossim for model {str(file).split('.')[0]} ...")
-   
+    
     doc2vecCossim(model, corpus, index, name)
+
+# Vectorizing from the full corpus trained Doc2Vec models
+
+for file in [f for f in listdir('./models/doc2vec') if f.endswith('Full.model')]:
+
+    absFile = path.abspath('./models/doc2vec/'+file)
+   
+    index = goldStdViolations
+    model = Doc2Vec.load(absFile)
+
+    print(f"Calculating cossim for model {str(file).split('.')[0]} ...")
+    
+    for keyGoldCorpus in list(docRepDict3.keys())[1:]:
+        
+        name = str(file).split('.')[0] + '_' + str(keyGoldCorpus) + '_Cossim'
+
+        if path.exists("./results/" + name + ".csv"):
+            continue
+
+        corpus = docRepDict3[keyGoldCorpus]
+
+        if keyGoldCorpus == 'Sent':
+            
+            index = data_orig_sent_.sort_index(level=1).loc[(slice(None), goldStdViolations),:].index
+
+        print(f"Calculating cossim for corpus {str(keyGoldCorpus)} ...")
+
+        doc2vecCossim(model, corpus, index, name)
+
 
 #### LDA models and Cosine Similarities ####
 
