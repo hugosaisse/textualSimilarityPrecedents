@@ -1,8 +1,7 @@
-from itertools import combinations, permutations
+from itertools import combinations
 import numpy as np
 from os import listdir, walk
 import pandas as pd
-from sklearn.metrics import confusion_matrix, precision_score, recall_score, f1_score, accuracy_score
 from tqdm import tqdm
 
 def topNSimilarViolations(simArray, n, violationId, threshold = 0):
@@ -257,5 +256,10 @@ for expColumn in expColumns:
     expResults[expColumn] = result
     result.to_csv(expColumn + '.csv')
 
-
-     
+# Remove duplicate models (Trained on full corpus and evaluated on full corpus)
+# Find duplicate rows
+for file in [x for x in listdir('./') if ('exp' in x) and ('.csv' in x)]:
+    expDf = pd.read_csv(file, index_col=0)
+    expDf.drop_duplicates(subset=['Model', 'Training Corpus', 'Evaluation Corpus',
+                    'Topics', 'Dimensions', 'Algorithm', 'N-Grams'], inplace=True)
+    expDf.to_csv(file)

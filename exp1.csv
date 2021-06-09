@@ -1,117 +1,103 @@
 ,Model,Training Corpus,Evaluation Corpus,Topics,Dimensions,Algorithm,N-Grams,mAR,recall@5,mAP,precision@5,f1
 ./resultspreTrained_skipGram_v300_FullNoStem_Cossim,Word2Vec,Full (No Stemming),Full (No Stemming),-,300,Skip-Gram,-,0.8367733333333334,0.6776666666666666,0.09478053363837853,0.22399999999999995,0.17027426084444885
-./resultspreTrained_skipGram_v100_FullNoStem_Cossim,Word2Vec,Full (No Stemming),Full (No Stemming),-,100,Skip-Gram,-,0.82128,0.6676666666666666,0.09211900292391731,0.21599999999999997,0.16565705563323596
+./resultspreTrained_skipGram_v100_FullNoStem_Cossim,Word2Vec,Full (No Stemming),Full (No Stemming),-,100,Skip-Gram,-,0.8212799999999999,0.6676666666666666,0.09211900292391732,0.216,0.16565705563323596
 ./resultspreTrained_cbow_v300_FullNoStem_Cossim,Word2Vec,Full (No Stemming),Full (No Stemming),-,300,CBOW,-,0.8427466666666668,0.6943333333333334,0.0962820887804709,0.22399999999999995,0.1728198607524192
-./resultspreTrained_cbow_v100_FullNoStem_Cossim,Word2Vec,Full (No Stemming),Full (No Stemming),-,100,CBOW,-,0.8060533333333333,0.6303333333333333,0.09153480922347956,0.20799999999999996,0.16440042953429815
-./results/trainedOnFullCorpustrained_cbow_v100_Full_ConRel_Cossim,Word2Vec,Full,Concepts & Relations,-,100,CBOW,-,0.8669933333333333,0.7636666666666667,0.10157820455466508,0.252,0.18185053497008302
+./resultspreTrained_cbow_v100_FullNoStem_Cossim,Word2Vec,Full (No Stemming),Full (No Stemming),-,100,CBOW,-,0.8060533333333333,0.6303333333333333,0.09153480922347956,0.208,0.16440042953429815
+./results/trainedOnFullCorpustrained_cbow_v100_Full_ConRel_Cossim,Word2Vec,Full,Concepts & Relations,-,100,CBOW,-,0.8669933333333333,0.7636666666666667,0.10157820455466507,0.252,0.18185053497008305
 ./results/trainedOnFullCorpustfidf_BiTri_Sent,TF-IDF,Full,Sentences,-,-,-,Bigrams and Trigrams,0.8651466666666667,0.715,0.10623420860448388,0.244,0.1892319970464425
-./results/trainedOnFullCorpusBM25PlusSent,BM25,Full,Sentences,-,-,-,-,0.19999999999999996,0.2,0.0,0.0,0.0
-./results/trainedOnFullCorpusLDASentCossim-40topics,LDA,Full,Sentences,40,-,-,-,0.19999999999999996,0.2,0.02,0.02,0.03636363636363637
-./results/trainedOnFullCorpusLDAConceptsAndRelationsCossim-80topics,LDA,Full,Concepts & Relations,80,-,-,-,0.5952466666666666,0.511,0.22223035205988423,0.256,0.32363448333231903
+./results/trainedOnFullCorpusBM25PlusSent,BM25,Full,Sentences,-,-,-,-,0.2,0.2,0.0,0.0,0.0
+./results/trainedOnFullCorpusLDASentCossim-40topics,LDA,Full,Sentences,40,-,-,-,0.2,0.2,0.02,0.02,0.03636363636363637
+./results/trainedOnFullCorpusLDAConceptsAndRelationsCossim-80topics,LDA,Full,Concepts & Relations,80,-,-,-,0.5952466666666666,0.511,0.22223035205988426,0.256,0.32363448333231903
 ./results/trainedOnFullCorpusLDAConceptsCossim-20topics,LDA,Full,Concepts,20,-,-,-,0.5886733333333333,0.4366666666666667,0.07461665786075128,0.126,0.1324453475500387
-./results/trainedOnFullCorpustrained_skipGram_v100_Full_ConRel_Cossim,Word2Vec,Full,Concepts & Relations,-,100,Skip-Gram,-,0.8360466666666666,0.741,0.10302070772674118,0.264,0.18343757144841447
-./results/trainedOnFullCorpusdoc2vec_v200_Full_ConRel_Cossim,Doc2Vec,Full,Concepts & Relations,-,200,-,-,0.8397866666666667,0.7106666666666667,0.104991187137238,0.256,0.18664747214461624
-./results/trainedOnFullCorpustrained_cbow_v100_Full_Full_Cossim,Word2Vec,Full,Full,-,100,CBOW,-,0.8762466666666665,0.6843333333333333,0.10067670961626092,0.21999999999999997,0.18060296918653687
-./results/trainedOnFullCorpusLDAConceptsCossim-40topics,LDA,Full,Concepts,40,-,-,-,0.6261733333333334,0.5363333333333333,0.14185193726613388,0.18199999999999997,0.23130462967291734
+./results/trainedOnFullCorpustrained_skipGram_v100_Full_ConRel_Cossim,Word2Vec,Full,Concepts & Relations,-,100,Skip-Gram,-,0.8360466666666666,0.741,0.10302070772674117,0.264,0.18343757144841447
+./results/trainedOnFullCorpusdoc2vec_v200_Full_ConRel_Cossim,Doc2Vec,Full,Concepts & Relations,-,200,-,-,0.8397866666666667,0.7106666666666667,0.10499118713723801,0.256,0.18664747214461624
+./results/trainedOnFullCorpustrained_cbow_v100_Full_Full_Cossim,Word2Vec,Full,Full,-,100,CBOW,-,0.8762466666666665,0.6843333333333333,0.10067670961626092,0.22,0.18060296918653687
+./results/trainedOnFullCorpusLDAConceptsCossim-40topics,LDA,Full,Concepts,40,-,-,-,0.6261733333333334,0.5363333333333333,0.14185193726613388,0.182,0.2313046296729173
 ./results/trainedOnFullCorpustfidf_BiTri_Full,TF-IDF,Full,Full,-,-,-,Bigrams and Trigrams,0.8736733333333332,0.769,0.10738361684685976,0.264,0.19125944209202872
-./results/trainedOnFullCorpusLDAConceptsCossim-80topics,LDA,Full,Concepts,80,-,-,-,0.5129799999999999,0.44299999999999995,0.156393650910493,0.16533333333333336,0.2397071200365861
+./results/trainedOnFullCorpusLDAConceptsCossim-80topics,LDA,Full,Concepts,80,-,-,-,0.5129799999999999,0.443,0.156393650910493,0.16533333333333336,0.2397071200365861
 ./results/trainedOnFullCorpustrained_cbow_v300_Full_Full_Cossim,Word2Vec,Full,Full,-,300,CBOW,-,0.8782333333333334,0.7206666666666667,0.10184745631888642,0.24,0.1825274650800908
-./results/trainedOnFullCorpusdoc2vec_v200_Full_Full_Cossim,Doc2Vec,Full,Full,-,200,-,-,0.8548066666666668,0.6763333333333332,0.1048352612484246,0.22399999999999998,0.18676524568197903
-./results/trainedOnFullCorpustfidf_BiTri_Con,TF-IDF,Full,Concepts,-,-,-,Bigrams and Trigrams,0.8497866666666667,0.653,0.0963269650274526,0.20800000000000002,0.1730391948253002
+./results/trainedOnFullCorpusdoc2vec_v200_Full_Full_Cossim,Doc2Vec,Full,Full,-,200,-,-,0.8548066666666668,0.6763333333333332,0.1048352612484246,0.224,0.18676524568197905
+./results/trainedOnFullCorpustfidf_BiTri_Con,TF-IDF,Full,Concepts,-,-,-,Bigrams and Trigrams,0.8497866666666667,0.653,0.0963269650274526,0.208,0.1730391948253002
 ./results/trainedOnFullCorpusBM25PlusConcepts,BM25,Full,Concepts,-,-,-,-,0.7036666666666666,0.34,0.0470462390795062,0.052000000000000005,0.08819582021005629
-./results/trainedOnFullCorpusdoc2vec_v300_Full_Full_Cossim,Doc2Vec,Full,Full,-,300,-,-,0.8609666666666667,0.6896666666666667,0.10554582710008811,0.22399999999999998,0.1880398639955272
-./results/trainedOnFullCorpustrained_cbow_v100_Full_Con_Cossim,Word2Vec,Full,Concepts,-,100,CBOW,-,0.8690666666666667,0.7303333333333333,0.10131521729973095,0.24,0.1814742827254495
-./results/trainedOnFullCorpusLDAFullCossim-20topics,LDA,Full,Full,20,-,-,-,0.7056066666666666,0.5846666666666667,0.11251647253027051,0.1466666666666667,0.19408416489749117
-./results/trainedOnFullCorpustrained_cbow_v300_Full_Con_Cossim,Word2Vec,Full,Concepts,-,300,CBOW,-,0.8645666666666666,0.716,0.10078441902088113,0.244,0.18052468267078214
-./results/trainedOnFullCorpustfidf_UniBi_Sent,TF-IDF,Full,Sentences,-,-,-,Unigrams and Bigrams,0.8799266666666667,0.6829999999999999,0.10622603587531801,0.228,0.18956723724438176
-./results/trainedOnFullCorpustrained_cbow_v100_Full_Sent_Cossim,Word2Vec,Full,Sentences,-,100,CBOW,-,0.84896,0.6493333333333332,0.09464038982958979,0.20800000000000002,0.17029646493520137
-./results/trainedOnFullCorpustfidf_UniBi_Full,TF-IDF,Full,Full,-,-,-,Unigrams and Bigrams,0.8835200000000001,0.7516666666666666,0.10479301341085695,0.24799999999999997,0.18736315712210622
+./results/trainedOnFullCorpusdoc2vec_v300_Full_Full_Cossim,Doc2Vec,Full,Full,-,300,-,-,0.8609666666666667,0.6896666666666667,0.10554582710008813,0.224,0.1880398639955272
+./results/trainedOnFullCorpustrained_cbow_v100_Full_Con_Cossim,Word2Vec,Full,Concepts,-,100,CBOW,-,0.8690666666666667,0.7303333333333333,0.10131521729973096,0.24,0.1814742827254495
+./results/trainedOnFullCorpusLDAFullCossim-20topics,LDA,Full,Full,20,-,-,-,0.7056066666666666,0.5846666666666667,0.11251647253027053,0.1466666666666667,0.1940841648974912
+./results/trainedOnFullCorpustrained_cbow_v300_Full_Con_Cossim,Word2Vec,Full,Concepts,-,300,CBOW,-,0.8645666666666666,0.716,0.10078441902088113,0.244,0.18052468267078212
+./results/trainedOnFullCorpustfidf_UniBi_Sent,TF-IDF,Full,Sentences,-,-,-,Unigrams and Bigrams,0.8799266666666667,0.6829999999999999,0.106226035875318,0.228,0.18956723724438174
+./results/trainedOnFullCorpustrained_cbow_v100_Full_Sent_Cossim,Word2Vec,Full,Sentences,-,100,CBOW,-,0.84896,0.6493333333333332,0.0946403898295898,0.208,0.17029646493520134
+./results/trainedOnFullCorpustfidf_UniBi_Full,TF-IDF,Full,Full,-,-,-,Unigrams and Bigrams,0.8835200000000001,0.7516666666666666,0.10479301341085696,0.248,0.18736315712210624
 ./results/trainedOnFullCorpustrained_skipGram_v300_Full_Full_Cossim,Word2Vec,Full,Full,-,300,Skip-Gram,-,0.8706533333333334,0.7306666666666666,0.10802649752661483,0.264,0.1922051056824765
-./results/trainedOnFullCorpusLDASentCossim-20topics,LDA,Full,Sentences,20,-,-,-,0.19999999999999996,0.2,0.0,0.0,0.0
+./results/trainedOnFullCorpusLDASentCossim-20topics,LDA,Full,Sentences,20,-,-,-,0.2,0.2,0.0,0.0,0.0
 ./results/trainedOnFullCorpusBM25PlusConceptsAndRelations,BM25,Full,Concepts & Relations,-,-,-,-,0.6966466666666666,0.34,0.04640081197830266,0.052000000000000005,0.0870064751562296
-./results/trainedOnFullCorpusdoc2vec_v200_Full_Sent_Cossim,Doc2Vec,Full,Sentences,-,200,-,-,0.7051666666666665,0.3526666666666667,0.060019545084296105,0.084,0.11062348456356526
+./results/trainedOnFullCorpusdoc2vec_v200_Full_Sent_Cossim,Doc2Vec,Full,Sentences,-,200,-,-,0.7051666666666665,0.3526666666666667,0.0600195450842961,0.084,0.11062348456356526
 ./results/trainedOnFullCorpusLDAConceptsCossim-10topics,LDA,Full,Concepts,10,-,-,-,0.7009733333333333,0.54,0.09086856766229684,0.14800000000000002,0.1608817181545367
-./results/trainedOnFullCorpusdoc2vec_v100_Full_ConRel_Cossim,Doc2Vec,Full,Concepts & Relations,-,100,-,-,0.8560666666666665,0.7323333333333334,0.10342206516206001,0.26,0.1845486656509722
-./results/trainedOnFullCorpustrained_skipGram_v300_Full_Sent_Cossim,Word2Vec,Full,Sentences,-,300,Skip-Gram,-,0.8511799999999999,0.6953333333333334,0.1020331763169823,0.23999999999999996,0.1822228252300371
-./results/trainedOnFullCorpusLDAFullCossim-10topics,LDA,Full,Full,10,-,-,-,0.6465199999999999,0.46299999999999997,0.08007977499105029,0.10800000000000001,0.14250809843108342
-./results/trainedOnFullCorpustfidf_UniBi_ConRel,TF-IDF,Full,Concepts & Relations,-,-,-,Unigrams and Bigrams,0.8685399999999999,0.727,0.10344646459169475,0.23999999999999996,0.18487375211384868
-./results/trainedOnFullCorpusdoc2vec_v300_Full_Con_Cossim,Doc2Vec,Full,Concepts,-,300,-,-,0.8382666666666667,0.6856666666666666,0.10198507387364807,0.236,0.18184638058035305
+./results/trainedOnFullCorpusdoc2vec_v100_Full_ConRel_Cossim,Doc2Vec,Full,Concepts & Relations,-,100,-,-,0.8560666666666665,0.7323333333333334,0.10342206516206,0.26,0.1845486656509722
+./results/trainedOnFullCorpustrained_skipGram_v300_Full_Sent_Cossim,Word2Vec,Full,Sentences,-,300,Skip-Gram,-,0.8511799999999999,0.6953333333333334,0.1020331763169823,0.24,0.1822228252300371
+./results/trainedOnFullCorpusLDAFullCossim-10topics,LDA,Full,Full,10,-,-,-,0.6465199999999999,0.463,0.08007977499105029,0.108,0.14250809843108342
+./results/trainedOnFullCorpustfidf_UniBi_ConRel,TF-IDF,Full,Concepts & Relations,-,-,-,Unigrams and Bigrams,0.8685399999999999,0.727,0.10344646459169476,0.24,0.18487375211384868
+./results/trainedOnFullCorpusdoc2vec_v300_Full_Con_Cossim,Doc2Vec,Full,Concepts,-,300,-,-,0.8382666666666667,0.6856666666666666,0.10198507387364808,0.23600000000000002,0.18184638058035305
 ./results/trainedOnFullCorpusBM25PlusFull,BM25,Full,Full,-,-,-,-,0.7005333333333332,0.34,0.04712446185175299,0.052000000000000005,0.08830846559788942
-./results/trainedOnFullCorpustrained_cbow_v300_Full_ConRel_Cossim,Word2Vec,Full,Concepts & Relations,-,300,CBOW,-,0.85914,0.6743333333333333,0.10010800391208453,0.23199999999999998,0.17932128110826046
-./results/trainedOnFullCorpustrained_skipGram_v100_Full_Full_Cossim,Word2Vec,Full,Full,-,100,Skip-Gram,-,0.8561933333333331,0.7423333333333333,0.10289085906312559,0.25999999999999995,0.1837053895563986
+./results/trainedOnFullCorpustrained_cbow_v300_Full_ConRel_Cossim,Word2Vec,Full,Concepts & Relations,-,300,CBOW,-,0.85914,0.6743333333333333,0.10010800391208452,0.232,0.17932128110826046
+./results/trainedOnFullCorpustrained_skipGram_v100_Full_Full_Cossim,Word2Vec,Full,Full,-,100,Skip-Gram,-,0.8561933333333331,0.7423333333333333,0.1028908590631256,0.25999999999999995,0.1837053895563986
 ./results/trainedOnFullCorpustrained_skipGram_v100_Full_Con_Cossim,Word2Vec,Full,Concepts,-,100,Skip-Gram,-,0.83752,0.7143333333333334,0.10062900201508004,0.244,0.1796703968914207
 ./results/trainedOnFullCorpusLDAConceptsAndRelationsCossim-10topics,LDA,Full,Concepts & Relations,10,-,-,-,0.7970199999999997,0.6136666666666666,0.09408511329247142,0.18,0.16830274201726794
-./results/trainedOnFullCorpusLDASentCossim-80topics,LDA,Full,Sentences,80,-,-,-,0.19999999999999996,0.2,0.04,0.04,0.06666666666666667
+./results/trainedOnFullCorpusLDASentCossim-80topics,LDA,Full,Sentences,80,-,-,-,0.2,0.2,0.04,0.04,0.06666666666666668
 ./results/trainedOnFullCorpusdoc2vec_v300_Full_ConRel_Cossim,Doc2Vec,Full,Concepts & Relations,-,300,-,-,0.8513066666666669,0.7056666666666667,0.10411351852746648,0.252,0.18553623585950588
-./results/trainedOnFullCorpustrained_skipGram_v300_Full_ConRel_Cossim,Word2Vec,Full,Concepts & Relations,-,300,Skip-Gram,-,0.8657733333333333,0.765,0.10742644862204694,0.272,0.19113640639088403
-./results/trainedOnFullCorpusLDAConceptsAndRelationsCossim-20topics,LDA,Full,Concepts & Relations,20,-,-,-,0.61128,0.562,0.11730004891121501,0.15200000000000002,0.19682991321434135
-./results/trainedOnFullCorpusdoc2vec_v300_Full_Sent_Cossim,Doc2Vec,Full,Sentences,-,300,-,-,0.7100066666666666,0.3566666666666667,0.05981707913135206,0.08800000000000001,0.11033830846504089
-./results/trainedOnFullCorpusdoc2vec_v100_Full_Full_Cossim,Doc2Vec,Full,Full,-,100,-,-,0.8547866666666667,0.6663333333333332,0.10613744068674733,0.22799999999999998,0.18882837559988178
-./results/trainedOnFullCorpustrained_cbow_v300_Full_Sent_Cossim,Word2Vec,Full,Sentences,-,300,CBOW,-,0.8559933333333334,0.6293333333333332,0.09655501488828688,0.20400000000000001,0.1735354414263177
+./results/trainedOnFullCorpustrained_skipGram_v300_Full_ConRel_Cossim,Word2Vec,Full,Concepts & Relations,-,300,Skip-Gram,-,0.8657733333333333,0.765,0.10742644862204694,0.272,0.19113640639088406
+./results/trainedOnFullCorpusLDAConceptsAndRelationsCossim-20topics,LDA,Full,Concepts & Relations,20,-,-,-,0.61128,0.562,0.117300048911215,0.15200000000000002,0.19682991321434132
+./results/trainedOnFullCorpusdoc2vec_v300_Full_Sent_Cossim,Doc2Vec,Full,Sentences,-,300,-,-,0.7100066666666666,0.3566666666666667,0.05981707913135206,0.08800000000000001,0.11033830846504088
+./results/trainedOnFullCorpusdoc2vec_v100_Full_Full_Cossim,Doc2Vec,Full,Full,-,100,-,-,0.8547866666666667,0.6663333333333332,0.10613744068674733,0.228,0.18882837559988175
+./results/trainedOnFullCorpustrained_cbow_v300_Full_Sent_Cossim,Word2Vec,Full,Sentences,-,300,CBOW,-,0.8559933333333334,0.6293333333333332,0.09655501488828687,0.204,0.1735354414263177
 ./results/trainedOnFullCorpustfidf_BiTri_ConRel,TF-IDF,Full,Concepts & Relations,-,-,-,Bigrams and Trigrams,0.8442733333333333,0.6746666666666666,0.09731715630223084,0.212,0.17451807520614565
-./results/trainedOnFullCorpusLDAConceptsAndRelationsCossim-40topics,LDA,Full,Concepts & Relations,40,-,-,-,0.62176,0.509,0.1491110098347682,0.18400000000000002,0.24053638103406585
+./results/trainedOnFullCorpusLDAConceptsAndRelationsCossim-40topics,LDA,Full,Concepts & Relations,40,-,-,-,0.6217600000000001,0.509,0.1491110098347682,0.184,0.24053638103406585
 ./results/trainedOnFullCorpusdoc2vec_v100_Full_Con_Cossim,Doc2Vec,Full,Concepts,-,100,-,-,0.8373,0.6973333333333334,0.10257318061496544,0.244,0.18275768667580392
-./results/trainedOnFullCorpustfidf_UniBi_Con,TF-IDF,Full,Concepts,-,-,-,Unigrams and Bigrams,0.87702,0.728,0.10290203016420123,0.228,0.18419248821150688
-./results/trainedOnFullCorpusdoc2vec_v100_Full_Sent_Cossim,Doc2Vec,Full,Sentences,-,100,-,-,0.7063133333333333,0.3566666666666667,0.059918033209614203,0.08800000000000001,0.11046508303099563
-./results/trainedOnFullCorpusLDASentCossim-10topics,LDA,Full,Sentences,10,-,-,-,0.19999999999999996,0.2,0.0,0.0,0.0
+./results/trainedOnFullCorpustfidf_UniBi_Con,TF-IDF,Full,Concepts,-,-,-,Unigrams and Bigrams,0.87702,0.728,0.10290203016420124,0.228,0.18419248821150688
+./results/trainedOnFullCorpusdoc2vec_v100_Full_Sent_Cossim,Doc2Vec,Full,Sentences,-,100,-,-,0.7063133333333333,0.3566666666666667,0.0599180332096142,0.08800000000000001,0.11046508303099564
+./results/trainedOnFullCorpusLDASentCossim-10topics,LDA,Full,Sentences,10,-,-,-,0.2,0.2,0.0,0.0,0.0
 ./results/trainedOnFullCorpustrained_skipGram_v300_Full_Con_Cossim,Word2Vec,Full,Concepts,-,300,Skip-Gram,-,0.8587600000000001,0.7476666666666667,0.10487896039447688,0.256,0.1869286314274621
-./results/trainedOnFullCorpustrained_skipGram_v100_Full_Sent_Cossim,Word2Vec,Full,Sentences,-,100,Skip-Gram,-,0.8400200000000001,0.6653333333333333,0.09926005934214625,0.228,0.17754115871891873
-./results/trainedOnFullCorpusLDAFullCossim-80topics,LDA,Full,Full,80,-,-,-,0.5892066666666667,0.5643333333333334,0.2523826221026995,0.2543333333333333,0.35339214858870827
-./results/trainedOnFullCorpusLDAFullCossim-40topics,LDA,Full,Full,40,-,-,-,0.58592,0.5063333333333333,0.22161171116121575,0.24100000000000002,0.32158918840936246
-./results/trainedOnFullCorpusdoc2vec_v200_Full_Con_Cossim,Doc2Vec,Full,Concepts,-,200,-,-,0.8499199999999999,0.6906666666666667,0.10312270623565337,0.23999999999999996,0.1839289045713231
+./results/trainedOnFullCorpustrained_skipGram_v100_Full_Sent_Cossim,Word2Vec,Full,Sentences,-,100,Skip-Gram,-,0.8400200000000001,0.6653333333333333,0.09926005934214624,0.228,0.17754115871891873
+./results/trainedOnFullCorpusLDAFullCossim-80topics,LDA,Full,Full,80,-,-,-,0.5892066666666667,0.5643333333333334,0.2523826221026995,0.2543333333333333,0.3533921485887083
+./results/trainedOnFullCorpusLDAFullCossim-40topics,LDA,Full,Full,40,-,-,-,0.58592,0.5063333333333333,0.22161171116121572,0.241,0.3215891884093625
+./results/trainedOnFullCorpusdoc2vec_v200_Full_Con_Cossim,Doc2Vec,Full,Concepts,-,200,-,-,0.8499199999999999,0.6906666666666667,0.10312270623565337,0.24,0.1839289045713231
 ./results/trainedOnCorpustfidf_BiTri_Sent,TF-IDF,Sentences,Sentences,-,-,-,Bigrams and Trigrams,0.8447199999999999,0.667,0.10014761496268006,0.22,0.17906570607696498
-./results/trainedOnCorpustrainedLDAConceptsCossim-10topics,LDA,Concepts,Concepts,10,-,-,-,0.6728000000000002,0.49566666666666664,0.08930632916452795,0.14800000000000002,0.15768219200531752
+./results/trainedOnCorpustrainedLDAConceptsCossim-10topics,LDA,Concepts,Concepts,10,-,-,-,0.6728000000000002,0.4956666666666666,0.08930632916452795,0.14800000000000002,0.15768219200531752
 ./results/trainedOnCorpusdoc2vec_v100_Sent_Cossim,Doc2Vec,Sentences,Sentences,-,100,-,-,0.7580666666666667,0.4446666666666667,0.07506371010852289,0.128,0.13660118054957346
-./results/trainedOnCorpustrainedLDASentCossim-10topics,LDA,Sentences,Sentences,10,-,-,-,0.7623733333333333,0.45,0.06336566921352917,0.10800000000000003,0.11700621215230536
-./results/trainedOnCorpusBM25PlusSent,BM25,Sentences,Sentences,-,-,-,-,0.6962866666666667,0.3913333333333333,0.05580750097073768,0.07200000000000001,0.10333285510770168
+./results/trainedOnCorpustrainedLDASentCossim-10topics,LDA,Sentences,Sentences,10,-,-,-,0.7623733333333333,0.45,0.06336566921352918,0.10800000000000004,0.11700621215230535
+./results/trainedOnCorpusBM25PlusSent,BM25,Sentences,Sentences,-,-,-,-,0.6962866666666667,0.3913333333333333,0.05580750097073768,0.07200000000000001,0.10333285510770167
 ./results/trainedOnCorpusdoc2vec_v300_ConRel_Cossim,Doc2Vec,Concepts & Relations,Concepts & Relations,-,300,-,-,0.8524333333333333,0.6806666666666666,0.10466611973324318,0.244,0.18644016365364696
-./results/trainedOnCorpustrainedLDAFullCossim-10topics,LDA,Full,Full,10,-,-,-,0.6504799999999998,0.501,0.07775858490958214,0.124,0.138911629677697
-./results/trainedOnCorpustrained_skipGram_v100_Con_Cossim_cossim,Word2Vec,Concepts,Concepts,-,100,Skip-Gram,-,0.86192,0.721,0.10644036809353626,0.26,0.18948128215490762
-./results/trainedOnCorpusdoc2vec_v300_Con_Cossim,Doc2Vec,Concepts,Concepts,-,300,-,-,0.8570399999999998,0.7,0.10220474858173059,0.23600000000000002,0.18263025751039208
-./results/trainedOnCorpusdoc2vec_v200_Con_Cossim,Doc2Vec,Concepts,Concepts,-,200,-,-,0.8461066666666665,0.6716666666666665,0.10195988842106563,0.22399999999999998,0.18198920922312237
-./results/trainedOnCorpusdoc2vec_v200_Sent_Cossim,Doc2Vec,Sentences,Sentences,-,200,-,-,0.7597733333333333,0.42266666666666663,0.07396729665656916,0.128,0.13481022158917144
+./results/trainedOnCorpustrained_skipGram_v100_Con_Cossim_cossim,Word2Vec,Concepts,Concepts,-,100,Skip-Gram,-,0.86192,0.721,0.10644036809353626,0.26,0.1894812821549076
+./results/trainedOnCorpusdoc2vec_v300_Con_Cossim,Doc2Vec,Concepts,Concepts,-,300,-,-,0.8570399999999998,0.7,0.1022047485817306,0.236,0.18263025751039208
+./results/trainedOnCorpusdoc2vec_v200_Con_Cossim,Doc2Vec,Concepts,Concepts,-,200,-,-,0.8461066666666665,0.6716666666666665,0.10195988842106564,0.224,0.1819892092231224
+./results/trainedOnCorpusdoc2vec_v200_Sent_Cossim,Doc2Vec,Sentences,Sentences,-,200,-,-,0.7597733333333333,0.4226666666666665,0.07396729665656916,0.128,0.13481022158917144
 ./results/trainedOnCorpustrained_cbow_v300_Con_Cossim_cossim,Word2Vec,Concepts,Concepts,-,300,CBOW,-,0.8465466666666667,0.6843333333333333,0.09767847449224028,0.228,0.17514760703152035
-./results/trainedOnCorpustfidf_BiTri_Full,TF-IDF,Full,Full,-,-,-,Bigrams and Trigrams,0.8736733333333332,0.769,0.10738361684685976,0.264,0.19125944209202872
-./results/trainedOnCorpustrainedLDAFullCossim-20topics,LDA,Full,Full,20,-,-,-,0.69062,0.5483333333333333,0.10921690953466655,0.15200000000000002,0.1886069051419844
-./results/trainedOnCorpustrained_cbow_v300_ConRel_Cossim_cossim,Word2Vec,Concepts & Relations,Concepts & Relations,-,300,CBOW,-,0.86328,0.7246666666666667,0.1018702622751816,0.244,0.1822359967236786
+./results/trainedOnCorpustrained_cbow_v300_ConRel_Cossim_cossim,Word2Vec,Concepts & Relations,Concepts & Relations,-,300,CBOW,-,0.8632799999999999,0.7246666666666667,0.1018702622751816,0.244,0.1822359967236786
 ./results/trainedOnCorpustrainedLDASentCossim-40topics,LDA,Sentences,Sentences,40,-,-,-,0.7993866666666668,0.5373333333333333,0.07781364611363371,0.14,0.14182209076237848
-./results/trainedOnCorpustrained_cbow_v100_ConRel_Cossim_cossim,Word2Vec,Concepts & Relations,Concepts & Relations,-,100,CBOW,-,0.8595266666666666,0.7263333333333333,0.10234907591230348,0.248,0.18291709866691713
-./results/trainedOnCorpusdoc2vec_v300_Full_Cossim,Doc2Vec,Full,Full,-,300,-,-,0.8500200000000001,0.6736666666666666,0.10709451323170073,0.23600000000000002,0.19022275156990098
-./results/trainedOnCorpusdoc2vec_v100_Full_Cossim,Doc2Vec,Full,Full,-,100,-,-,0.8549733333333333,0.6696666666666666,0.10679349282724936,0.22799999999999998,0.1898705300645873
+./results/trainedOnCorpustrained_cbow_v100_ConRel_Cossim_cossim,Word2Vec,Concepts & Relations,Concepts & Relations,-,100,CBOW,-,0.8595266666666666,0.7263333333333333,0.10234907591230348,0.248,0.18291709866691716
 ./results/trainedOnCorpustrained_skipGram_v300_ConRel_Cossim,Word2Vec,Concepts & Relations,Concepts & Relations,-,300,Skip-Gram,-,0.8730866666666667,0.7683333333333333,0.10868353506165968,0.272,0.19330418703172675
-./results/trainedOnCorpustrainedLDAConceptsAndRelationsCossim-80topics,LDA,Concepts & Relations,Concepts & Relations,80,-,-,-,0.6807666666666669,0.6396666666666667,0.25362014535516086,0.29366666666666663,0.36956031213530244
-./results/trainedOnCorpusdoc2vec_v200_ConRel_Cossim,Doc2Vec,Concepts & Relations,Concepts & Relations,-,200,-,-,0.8516933333333333,0.6666666666666665,0.10359448148148623,0.23200000000000004,0.1847207257951021
+./results/trainedOnCorpustrainedLDAConceptsAndRelationsCossim-80topics,LDA,Concepts & Relations,Concepts & Relations,80,-,-,-,0.6807666666666669,0.6396666666666667,0.2536201453551609,0.29366666666666663,0.3695603121353024
+./results/trainedOnCorpusdoc2vec_v200_ConRel_Cossim,Doc2Vec,Concepts & Relations,Concepts & Relations,-,200,-,-,0.8516933333333333,0.6666666666666665,0.10359448148148624,0.23200000000000004,0.1847207257951021
 ./results/trainedOnCorpustfidf_BiTri_Con,TF-IDF,Concepts,Concepts,-,-,-,Bigrams and Trigrams,0.8561666666666667,0.7483333333333333,0.10517080529758843,0.26,0.1873301320883773
-./results/trainedOnCorpustrained_skipGram_v300_Con_Cossim_cossim,Word2Vec,Concepts,Concepts,-,300,Skip-Gram,-,0.85768,0.77,0.10641376851096837,0.272,0.1893362740378484
+./results/trainedOnCorpustrained_skipGram_v300_Con_Cossim_cossim,Word2Vec,Concepts,Concepts,-,300,Skip-Gram,-,0.8576799999999999,0.77,0.10641376851096836,0.272,0.1893362740378484
 ./results/trainedOnCorpusBM25PlusConcepts,BM25,Concepts,Concepts,-,-,-,-,0.7047599999999999,0.34,0.04663519665742229,0.052000000000000005,0.0874815845043778
-./results/trainedOnCorpustrained_cbow_v300_Full_Cossim,Word2Vec,Full,Full,-,300,CBOW,-,0.8782333333333334,0.7206666666666667,0.10184745631888642,0.24,0.1825274650800908
-./results/trainedOnCorpusdoc2vec_v200_Full_Cossim,Doc2Vec,Full,Full,-,200,-,-,0.8497666666666666,0.6579999999999999,0.1043832896556275,0.22,0.1859276720993781
 ./results/trainedOnCorpusdoc2vec_v100_ConRel_Cossim,Doc2Vec,Concepts & Relations,Concepts & Relations,-,100,-,-,0.8544933333333333,0.6669999999999999,0.1040297532771914,0.228,0.185478538567097
-./results/trainedOnCorpustrainedLDAConceptsAndRelationsCossim-20topics,LDA,Concepts & Relations,Concepts & Relations,20,-,-,-,0.67814,0.48733333333333334,0.09754687660702363,0.13333333333333333,0.17055964435453497
-./results/trainedOnCorpustrained_cbow_v100_Sent_Cossim,Word2Vec,Sentences,Sentences,-,100,CBOW,-,0.8513133333333335,0.6503333333333333,0.09646072780630073,0.20800000000000002,0.17328666628795378
-./results/trainedOnCorpustrained_skipGram_v300_Full_Cossim,Word2Vec,Full,Full,-,300,Skip-Gram,-,0.8706533333333334,0.7306666666666666,0.10802649752661483,0.264,0.1922051056824765
+./results/trainedOnCorpustrainedLDAConceptsAndRelationsCossim-20topics,LDA,Concepts & Relations,Concepts & Relations,20,-,-,-,0.67814,0.4873333333333333,0.09754687660702364,0.13333333333333333,0.17055964435453494
+./results/trainedOnCorpustrained_cbow_v100_Sent_Cossim,Word2Vec,Sentences,Sentences,-,100,CBOW,-,0.8513133333333335,0.6503333333333333,0.09646072780630073,0.208,0.17328666628795378
 ./results/trainedOnCorpusdoc2vec_v300_Sent_Cossim,Doc2Vec,Sentences,Sentences,-,300,-,-,0.7541999999999999,0.4306666666666667,0.07330865942169787,0.11600000000000002,0.13362854951749598
-./results/trainedOnCorpustrained_skipGram_v300_Sent_Cossim_cossim,Word2Vec,Sentences,Sentences,-,300,Skip-Gram,-,0.84608,0.6829999999999999,0.09963820474167723,0.228,0.17828120859926835
-./results/trainedOnCorpustfidf_UniBi_Sent,TF-IDF,Sentences,Sentences,-,-,-,Unigrams and Bigrams,0.85596,0.6703333333333333,0.09911745883915499,0.22399999999999998,0.17766219751659146
-./results/trainedOnCorpustfidf_UniBi_Full,TF-IDF,Full,Full,-,-,-,Unigrams and Bigrams,0.8835200000000001,0.7516666666666666,0.10479301341085695,0.24799999999999997,0.18736315712210622
+./results/trainedOnCorpustrained_skipGram_v300_Sent_Cossim_cossim,Word2Vec,Sentences,Sentences,-,300,Skip-Gram,-,0.8460799999999999,0.6829999999999999,0.09963820474167724,0.228,0.17828120859926835
+./results/trainedOnCorpustfidf_UniBi_Sent,TF-IDF,Sentences,Sentences,-,-,-,Unigrams and Bigrams,0.85596,0.6703333333333333,0.099117458839155,0.224,0.17766219751659146
 ./results/trainedOnCorpusBM25PlusConceptsAndRelations,BM25,Concepts & Relations,Concepts & Relations,-,-,-,-,0.6933533333333333,0.34,0.046410186424845616,0.052000000000000005,0.08699714597661425
-./results/trainedOnCorpustrainedLDAConceptsCossim-40topics,LDA,Concepts,Concepts,40,-,-,-,0.6809266666666666,0.6289999999999999,0.20144378219321843,0.2303333333333333,0.31090896869175577
-./results/trainedOnCorpustrainedLDAConceptsCossim-80topics,LDA,Concepts,Concepts,80,-,-,-,0.6544933333333334,0.6433333333333334,0.33957525252525256,0.36233333333333334,0.4471517199204155
-./results/trainedOnCorpustrainedLDAConceptsAndRelationsCossim-10topics,LDA,Concepts & Relations,Concepts & Relations,10,-,-,-,0.68646,0.474,0.0893312302714829,0.15200000000000002,0.15808973842280433
-./results/trainedOnCorpustrainedLDAConceptsCossim-20topics,LDA,Concepts,Concepts,20,-,-,-,0.6836333333333332,0.6253333333333333,0.17170892790672035,0.20266666666666663,0.27447713521785083
-./results/trainedOnCorpustrained_skipGram_v100_Sent_Cossim_cossim,Word2Vec,Sentences,Sentences,-,100,Skip-Gram,-,0.84804,0.6723333333333333,0.09989579977617505,0.22000000000000003,0.17873707072185774
-./results/trainedOnCorpustfidf_UniBi_ConRel,TF-IDF,Concepts & Relations,Concepts & Relations,-,-,-,Unigrams and Bigrams,0.8667933333333332,0.7103333333333333,0.10408371746793793,0.236,0.18585066427371089
-./results/trainedOnCorpustrained_skipGram_v100_Full_Cossim,Word2Vec,Full,Full,-,100,Skip-Gram,-,0.8561933333333331,0.7423333333333333,0.10289085906312559,0.25999999999999995,0.1837053895563986
-./results/trainedOnCorpustrainedLDAConceptsAndRelationsCossim-40topics,LDA,Concepts & Relations,Concepts & Relations,40,-,-,-,0.5891733333333333,0.465,0.1402600786663569,0.172,0.22657996390625476
-./results/trainedOnCorpusBM25PlusFull,BM25,Full,Full,-,-,-,-,0.7005333333333332,0.34,0.04712446185175299,0.052000000000000005,0.08830846559788942
-./results/trainedOnCorpustrainedLDAFullCossim-80topics,LDA,Full,Full,80,-,-,-,0.55892,0.531,0.3251191643323996,0.33533333333333337,0.4111030611769131
-./results/trainedOnCorpustrainedLDASentCossim-80topics,LDA,Sentences,Sentences,80,-,-,-,0.8188999999999999,0.6213333333333333,0.08307782397083113,0.17999999999999997,0.15085166894727048
-./results/trainedOnCorpustrained_cbow_v100_Con_Cossim_cossim,Word2Vec,Concepts,Concepts,-,100,CBOW,-,0.8563200000000001,0.7096666666666667,0.09932127596002481,0.23600000000000002,0.17799732424627124
-./results/trainedOnCorpustrainedLDAFullCossim-40topics,LDA,Full,Full,40,-,-,-,0.5882466666666667,0.568,0.1669414276704585,0.20866666666666667,0.2600749113819656
-./results/trainedOnCorpustfidf_BiTri_ConRel,TF-IDF,Concepts & Relations,Concepts & Relations,-,-,-,Bigrams and Trigrams,0.8503333333333335,0.7416666666666666,0.10570503301738125,0.264,0.1880353681178659
-./results/trainedOnCorpustrained_skipGram_v100_ConRel_Cossim_cossim,Word2Vec,Concepts & Relations,Concepts & Relations,-,100,Skip-Gram,-,0.8583866666666666,0.7616666666666666,0.10716265623933975,0.26799999999999996,0.19053815915603392
-./results/trainedOnCorpustrained_cbow_v100_Full_Cossim,Word2Vec,Full,Full,-,100,CBOW,-,0.8762466666666665,0.6843333333333333,0.10067670961626092,0.21999999999999997,0.18060296918653687
-./results/trainedOnCorpustfidf_UniBi_Con,TF-IDF,Concepts,Concepts,-,-,-,Unigrams and Bigrams,0.87488,0.7583333333333333,0.10520816436138526,0.256,0.18782905902442754
+./results/trainedOnCorpustrainedLDAConceptsCossim-40topics,LDA,Concepts,Concepts,40,-,-,-,0.6809266666666666,0.6289999999999999,0.20144378219321846,0.2303333333333333,0.31090896869175577
+./results/trainedOnCorpustrainedLDAConceptsCossim-80topics,LDA,Concepts,Concepts,80,-,-,-,0.6544933333333334,0.6433333333333334,0.33957525252525256,0.3623333333333333,0.4471517199204155
+./results/trainedOnCorpustrainedLDAConceptsAndRelationsCossim-10topics,LDA,Concepts & Relations,Concepts & Relations,10,-,-,-,0.6864600000000001,0.474,0.0893312302714829,0.15200000000000002,0.15808973842280433
+./results/trainedOnCorpustrainedLDAConceptsCossim-20topics,LDA,Concepts,Concepts,20,-,-,-,0.6836333333333332,0.6253333333333333,0.17170892790672035,0.20266666666666666,0.27447713521785083
+./results/trainedOnCorpustrained_skipGram_v100_Sent_Cossim_cossim,Word2Vec,Sentences,Sentences,-,100,Skip-Gram,-,0.84804,0.6723333333333333,0.09989579977617503,0.22000000000000006,0.17873707072185774
+./results/trainedOnCorpustfidf_UniBi_ConRel,TF-IDF,Concepts & Relations,Concepts & Relations,-,-,-,Unigrams and Bigrams,0.8667933333333332,0.7103333333333333,0.10408371746793793,0.23600000000000002,0.18585066427371089
+./results/trainedOnCorpustrainedLDAConceptsAndRelationsCossim-40topics,LDA,Concepts & Relations,Concepts & Relations,40,-,-,-,0.5891733333333333,0.465,0.1402600786663569,0.172,0.2265799639062548
+./results/trainedOnCorpustrainedLDASentCossim-80topics,LDA,Sentences,Sentences,80,-,-,-,0.8188999999999999,0.6213333333333333,0.08307782397083112,0.17999999999999994,0.15085166894727048
+./results/trainedOnCorpustrained_cbow_v100_Con_Cossim_cossim,Word2Vec,Concepts,Concepts,-,100,CBOW,-,0.8563200000000001,0.7096666666666667,0.0993212759600248,0.236,0.17799732424627124
+./results/trainedOnCorpustfidf_BiTri_ConRel,TF-IDF,Concepts & Relations,Concepts & Relations,-,-,-,Bigrams and Trigrams,0.8503333333333335,0.7416666666666666,0.10570503301738124,0.264,0.1880353681178659
+./results/trainedOnCorpustrained_skipGram_v100_ConRel_Cossim_cossim,Word2Vec,Concepts & Relations,Concepts & Relations,-,100,Skip-Gram,-,0.8583866666666666,0.7616666666666666,0.10716265623933977,0.268,0.19053815915603392
+./results/trainedOnCorpustfidf_UniBi_Con,TF-IDF,Concepts,Concepts,-,-,-,Unigrams and Bigrams,0.8748799999999999,0.7583333333333333,0.10520816436138526,0.256,0.18782905902442756
 ./results/trainedOnCorpustrained_cbow_v300_Sent_Cossim_cossim,Word2Vec,Sentences,Sentences,-,300,CBOW,-,0.8526466666666667,0.632,0.09734000673011907,0.204,0.17473220329498515
-./results/trainedOnCorpustrainedLDASentCossim-20topics,LDA,Sentences,Sentences,20,-,-,-,0.7605533333333334,0.43333333333333335,0.06304666601048327,0.10399999999999998,0.11644087427884824
-./results/trainedOnCorpusdoc2vec_v100_Con_Cossim,Doc2Vec,Concepts,Concepts,-,100,-,-,0.8386,0.6356666666666666,0.10006047624374535,0.22000000000000003,0.17878821469886938
+./results/trainedOnCorpustrainedLDASentCossim-20topics,LDA,Sentences,Sentences,20,-,-,-,0.7605533333333334,0.43333333333333335,0.06304666601048327,0.10399999999999998,0.11644087427884825
+./results/trainedOnCorpusdoc2vec_v100_Con_Cossim,Doc2Vec,Concepts,Concepts,-,100,-,-,0.8386,0.6356666666666666,0.10006047624374537,0.22000000000000006,0.17878821469886938
