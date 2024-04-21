@@ -4,23 +4,11 @@ This project is related to the paper "Textual similarity for legal precedents di
 
 ## Project Structure
 
-- `goldStandardViolations`: This directory contains the code used to create a random set of case pairs.
-- `goldStandardViolations/expertsEvaluations`: This directory contains the scores given by the experts to the case pairs.
+- `goldStandardViolations`: This directory contains the code to create a random set of case pairs.
+- `goldStandardViolations/expertsEvaluations`: This directory contains expert scores to the case pairs.
 - `models`: These are the models used in the paper, both pre-trained and fine-tuned models.
-- `results`: These are the files containing results per model assembly.
-- `documentSimilarity.py`: The code used to compute similarity between the case pairs employing the models and assemblies under analysis.
+- `results`: These files contain results per model assembly.
+- `documentSimilarity.py`: The code used to compute the similarity between the case pairs employing the models and assemblies under analysis.
 - `resultsEvaluation.py`: The code used to compute the performance metrics considering the results.
 
-Please note that the some huge files and directories are ignored by Git as specified in the `.gitignore` file.
-
-## Getting Started
-
-To get started with this project, clone the repository and install the required dependencies.
-
-## Contributing
-
-We welcome contributions! Please see our contributing guidelines for details.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+Please note that some huge files and directories are ignored by Git as specified in the `.gitignore` file. At the same time, the content of infractions was not included in the repository due to the nature of the data, which includes confidential information about people and companies and the penalties issued by SUSEP. It could violate personal, commercial, and competitive confidentiality.
