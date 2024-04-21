@@ -1,0 +1,4 @@
+,mAR,recall@5,mAP,precision@5,f1
+dominguesm/legal-bert-ner-base-cased-ptbr/full_text_emb_hs_similarity,0.7625399999999999,0.5413333333333334,0.08296797365150717,0.156,0.14965299110070077
+lisaterumi/postagger-portuguese/summarized_text_N_emb_hs_similarity,0.7683133333333333,0.5623333333333334,0.08677726554959729,0.192,0.15594167504370124
+lisaterumi/postagger-portuguese/summarized_text_N_V_emb_hs_similarity,0.7541400000000001,0.57,0.08055198661406347,0.17600000000000002,0.14555662725732538

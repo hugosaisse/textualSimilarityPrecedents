@@ -215,7 +215,6 @@ def calculateMetrics(vioScores, expColumn):
                 topNSimilar_experts = topNSimilarViolations(vioScores[expColumn], N, violation)
                 totalSimilar_experts = topNSimilarViolations(vioScores[expColumn], 50, violation)
                 Num = len(set(topNSimilar_model.index).intersection(set(totalSimilar_experts.index)))
-                #recallDen = len(topNSimilar_experts.index)
                 recallDen = len(totalSimilar_experts.index)
                 precisionDen = len(topNSimilar_model.index)
                 if recallDen == 0:
